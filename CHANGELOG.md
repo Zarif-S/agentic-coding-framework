@@ -40,10 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-01-31
 
 ### Added
-- Initial release with core functionality
-- [Feature 1 - e.g., "User authentication with JWT"]
-- [Feature 2 - e.g., "RESTful API endpoints for user management"]
-- [Feature 3 - e.g., "PostgreSQL database integration"]
+- Initial release with core ML pipeline
+- Baseline XGBoost model achieving 0.85 F1 score on test set
+- Feature engineering pipeline with 47 derived features
+- MLflow experiment tracking integration
+- Data validation framework using Great Expectations
 - Documentation framework:
   - Root CLAUDE.md for project overview
   - ROADMAP.md for strategic planning
@@ -60,19 +61,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2025-01-15
 
 ### Added
-- [Feature that was added - e.g., "Rate limiting middleware"]
-- [Another feature - e.g., "Redis caching layer"]
+- Model serving API with FastAPI and ONNX Runtime
+- Automated data quality monitoring dashboard
 
 ### Changed
-- [What changed - e.g., "Updated authentication flow to support refresh tokens"]
-- [Another change - e.g., "Improved error messages for validation failures"]
+- Updated feature engineering pipeline to handle missing values more robustly
+- Improved model training logging with detailed hyperparameter tracking
 
 ### Fixed
-- [Bug fix - e.g., "Fixed race condition in concurrent user creation"]
-- [Another fix - e.g., "Corrected CORS configuration for production environment"]
+- Fixed memory leak in data preprocessing pipeline for large datasets
+- Corrected feature scaling in production inference pipeline
 
 ### Deprecated
-- [Deprecated feature - e.g., "Legacy API v1 endpoints (use v2)"]
+- Legacy CSV-based data loading (use Parquet format)
 
 ---
 
@@ -80,82 +81,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial project setup
-- Basic project structure
-- [Core component 1]
-- [Core component 2]
+- Basic data pipeline structure
+- Exploratory data analysis notebooks
+- Initial model training framework
 
 ---
 
 ## How to Use This Changelog
 
-### When to Update
+**Format**: Based on [Keep a Changelog](https://keepachangelog.com/) + [Semantic Versioning](https://semver.org/)
 
-Update this file when:
-- **Releasing a new version**: Move items from [Unreleased] to a new version section
-- **Completing a user-facing feature**: Add to [Unreleased] > Added
-- **Making a breaking change**: Add to [Unreleased] > Changed and note in release notes
-- **Fixing a bug**: Add to [Unreleased] > Fixed
-- **Deprecating a feature**: Add to [Unreleased] > Deprecated
+**When to update**:
+- Releasing a new version: Move items from [Unreleased] to new version section
+- Completing user-facing features, bug fixes, or breaking changes: Add to [Unreleased]
+- Don't update for internal refactoring or minor cleanup
 
-**Don't update for**:
-- Internal refactoring (unless it affects users)
-- Documentation-only changes (unless they reflect new features)
-- Minor code cleanup or formatting
-
-### Categories Explained
-
-- **Added**: New features, functionality, or capabilities
-- **Changed**: Changes to existing functionality (especially breaking changes)
-- **Deprecated**: Features that will be removed in future versions
-- **Removed**: Features that have been removed
-- **Fixed**: Bug fixes
-- **Security**: Security improvements or vulnerability fixes
-
-### Version Numbering (Semantic Versioning)
-
-- **Major (X.0.0)**: Breaking changes, incompatible API changes
-- **Minor (0.X.0)**: New features, backwards-compatible
-- **Patch (0.0.X)**: Bug fixes, backwards-compatible
-
-**Examples**:
-- `1.0.0 → 2.0.0`: Removed support for API v1 (breaking change)
-- `1.0.0 → 1.1.0`: Added new export feature (new functionality)
-- `1.0.0 → 1.0.1`: Fixed login bug (bug fix)
+**Version numbering**:
+- **Major (X.0.0)**: Breaking changes (e.g., removed model API, changed data format)
+- **Minor (0.X.0)**: New features, backwards-compatible (e.g., new model, new pipeline)
+- **Patch (0.0.X)**: Bug fixes, backwards-compatible (e.g., fixed inference bug)
 
 ---
 
 ## Template for New Entries
 
-When adding a new entry, copy this template:
-
 ```markdown
 ## [X.Y.Z] - YYYY-MM-DD
 
 ### Added
-- [Feature description] ([#PR-number](link) or [Commit hash](link))
-  - Additional context if needed
+- [New feature or capability description]
 
 ### Changed
-- [Change description] ([#PR-number](link))
-  - **BREAKING**: Note breaking changes clearly
+- [Change to existing functionality]
+- **BREAKING**: [Note breaking changes clearly]
 
 ### Fixed
-- [Bug fix description] ([#PR-number](link))
-  - Impact: [Who was affected]
-
-### Security
-- [Security fix] ([#PR-number](link))
-  - CVE: [CVE number if applicable]
+- [Bug fix description]
 ```
+
+---
+
+## Data Science Changelog Patterns
+
+**Model Updates**: Document performance changes and version increments
+```markdown
+### Added
+- Trained model v2.1 with transformer architecture (F1: 0.82 → 0.87)
+- Deployed gradient boosting ensemble to production
+```
+
+**Dataset Changes**: Track data updates and quality fixes
+```markdown
+### Changed
+- Updated training dataset with 10k new labeled samples (total: 100k)
+- Fixed data quality issues in feature_x (affected 3% of records)
+```
+
+**Experiment Results**: Reference experiment tracking for reproducibility
+```markdown
+### Added
+- Completed hyperparameter tuning (see MLflow run #234)
+- A/B tested model v2.0 in production (5% traffic, +12% accuracy)
+```
+
+**Version Bumping for ML**:
+- **Major**: Breaking changes to model API, data format, or feature schema
+- **Minor**: New models, new features, pipeline improvements
+- **Patch**: Bug fixes in inference, training, or data processing
 
 ---
 
 **Last Updated**: 2025-01-31
 **Current Version**: 1.0.0
-
----
-
-**Related Documentation**:
-- [ROADMAP.md](ROADMAP.md) - Strategic vision and future direction
-- [PROJECT_PLAN.md](PROJECT_PLAN.md) - Current development sprint
-- [CLAUDE.md](CLAUDE.md) - Implementation details

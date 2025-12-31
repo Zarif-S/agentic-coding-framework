@@ -43,32 +43,33 @@ For larger projects (10+ documented modules), consider creating a **DOCS.md** in
 
 ---
 
-## 📍 Breadcrumbs
+## For AI Agents
 
-- **Looking for strategic goals?** → [ROADMAP.md](ROADMAP.md)
-- **Looking for current work?** → [PROJECT_PLAN.md](PROJECT_PLAN.md)
-- **Looking for feature history?** → [CHANGELOG.md](CHANGELOG.md)
-- **Looking for advanced patterns?** → [docs/ADVANCED_FEATURES.md](docs/ADVANCED_FEATURES.md)
+This file is your **entry point** for understanding the project:
+- **Read this FIRST** before making code changes
+- Use the navigation table above to find module-specific CLAUDE.md files
+- Check [PROJECT_PLAN.md](PROJECT_PLAN.md) for current priorities before implementing features
+- When you modify project structure, setup, or common workflows, **update this file**
+- For data science projects: Pay attention to data paths, model artifacts, and compute requirements
 
 ---
 
-## Hierarchical Documentation Guide
+## Documentation Hierarchy
 
-**Where should information live?** Use this table as a flexible guideline:
+**Where should information live?**
 
 | Content Type | Root CLAUDE.md | Subfolder CLAUDE.md | Code Comments |
 |--------------|----------------|---------------------|---------------|
-| **Setup & Installation** | ✓ Primary | Additional module setup | |
-| **Environment Variables** | ✓ All variables | Module-specific vars | |
-| **High-level Architecture** | ✓ Overview + diagram | Detailed component design | |
+| **Setup & Installation** | ✓ Primary | Module-specific setup | — |
+| **Environment Variables** | ✓ All variables | Module-specific vars | — |
+| **Architecture** | Overview + diagram | Detailed design | Implementation notes |
 | **Design Patterns** | Mention + link | Explain + examples | Reference in code |
-| **API Contracts** | Link to subfolder | Full specification | Implementation notes |
-| **Why Decisions Made** | Strategic context | Technical rationale | Edge case explanations |
-| **How to Extend** | General guidance | Step-by-step instructions | Implementation details |
-| **Common Commands** | ✓ Frequent commands | Module-specific commands | |
-| **Testing Strategy** | Overview + structure | Component test patterns | Test case explanations |
+| **Why Decisions Made** | Strategic context | Technical rationale | Edge cases |
+| **Common Tasks** | ✓ Frequent workflows | Module-specific workflows | — |
 
-**Guiding Principle**: Optimize for **findability** and **context efficiency**, not rigid rules. If repetition aids clarity, repeat it.
+**Principle**: Optimize for **findability** and **context efficiency**. Repeat information if it aids clarity.
+
+**Note**: Design patterns and decision rationale belong in "Important Implementation Notes" section below. See [docs/ADVANCED_FEATURES.md#hierarchical-docs](docs/ADVANCED_FEATURES.md) for extended guidance.
 
 ---
 
@@ -133,6 +134,105 @@ REDIS_URL=redis://localhost:6379
 DEBUG=true
 LOG_LEVEL=info
 ```
+
+---
+
+## Data Setup
+
+### Data Storage Locations
+
+**Local Development**:
+```bash
+data/
+├── raw/              # Original, immutable data
+├── interim/          # Intermediate processed data
+├── processed/        # Final feature sets ready for modeling
+└── external/         # External reference data
+```
+
+**Remote Storage**:
+- **Training Data**: `[s3://bucket/path or gs://bucket/path]`
+- **Model Artifacts**: `[s3://bucket/models or MLflow/W&B]`
+- **Data Versioning**: [DVC, LakeFS, or version control method]
+
+### Downloading Datasets
+
+```bash
+# [Method 1 - e.g., DVC]
+dvc pull
+
+# [Method 2 - e.g., Custom script]
+python scripts/download_data.py --dataset [dataset_name]
+
+# [Method 3 - e.g., Cloud storage]
+aws s3 sync s3://bucket/path data/raw/
+```
+
+### Pre-trained Models
+
+**Location**: `models/pretrained/` or `[remote path]`
+
+**Download**:
+```bash
+# [Example command]
+python scripts/download_models.py --model [model_name]
+```
+
+**Available Models**:
+- **[Model 1]**: [Description, use case, size]
+- **[Model 2]**: [Description, use case, size]
+
+---
+
+## Compute Environment
+
+### Hardware Requirements
+
+**Minimum**:
+- CPU: [e.g., 4 cores]
+- RAM: [e.g., 16GB]
+- Storage: [e.g., 50GB]
+
+**Recommended (for training)**:
+- GPU: [e.g., NVIDIA GPU with 16GB+ VRAM (T4, V100, A100)]
+- CUDA: [e.g., 11.8+]
+- RAM: [e.g., 32GB+]
+- Storage: [e.g., 100GB+ SSD]
+
+### Cloud Setup
+
+**Recommended Instances**:
+- **Development**: [e.g., AWS p3.2xlarge, GCP n1-standard-4 with T4 GPU]
+- **Training**: [e.g., AWS p3.8xlarge, GCP a2-highgpu-1g with A100]
+- **Inference**: [e.g., AWS g4dn.xlarge, GCP n1-standard-2 with T4]
+
+**Docker Image** (if applicable):
+```bash
+# Build
+docker build -t [project-name]:[tag] .
+
+# Run with GPU
+docker run --gpus all -v $(pwd):/workspace [project-name]:[tag]
+```
+
+### Jupyter Notebooks
+
+**Starting Jupyter**:
+```bash
+# Local
+jupyter lab
+
+# Remote with port forwarding
+ssh -L 8888:localhost:8888 [remote-server]
+jupyter lab --no-browser --port=8888
+```
+
+**Notebook Organization**:
+- `notebooks/eda/`: Exploratory data analysis
+- `notebooks/experiments/`: Model experiments and prototyping
+- `notebooks/reports/`: Final reports and visualizations
+
+**Execution Order**: See `notebooks/README.md` for recommended execution sequence
 
 ---
 
@@ -217,37 +317,38 @@ your-project/
 
 ## Common Tasks
 
-### [Task Category 1 - e.g., Adding a New Feature]
+### Training a Model
 
-**Example: Adding a new API endpoint**
+**Example: Running a new training experiment**
 
-1. **Create the endpoint** in `[folder]/[file]`
-2. **Add validation** using `[validation library/pattern]`
-3. **Write tests** in `tests/[category]/test_[feature].py`
-4. **Update documentation**:
-   - If it affects architecture, update relevant `CLAUDE.md`
-   - If it's a new feature, add to `CHANGELOG.md`
-   - If it changes the roadmap, update `ROADMAP.md`
-5. **Run tests** to ensure nothing breaks
+1. **Prepare dataset**: Ensure data is available (see [Data Setup](#data-setup))
+2. **Configure experiment**: Update `configs/[model_config].yaml` with hyperparameters
+3. **Run training**: `python train.py --config configs/[model_config].yaml`
+4. **Track metrics**: Experiment automatically logs to [MLflow/W&B/Neptune]
+5. **Save checkpoint**: Model artifacts saved to `models/[experiment_id]/`
+6. **Update documentation**:
+   - Add experiment results to `CHANGELOG.md` if significant
+   - Update `ROADMAP.md` if this changes strategic direction
 
-### [Task Category 2 - e.g., Database Operations]
+### Running Data Pipelines
 
-**Example: Adding a new database model**
+**Example: Processing new data or updating features**
 
-1. **Create model** in `[models folder]/[model_name].py`
-2. **Create migration**: `[migration command]`
-3. **Run migration**: `[migration run command]`
-4. **Update tests** if schema changes affect existing tests
+1. **Configure pipeline**: Update `pipelines/[pipeline_name].py` or config file
+2. **Run locally**: `python pipelines/[pipeline_name].py --env dev`
+3. **Verify output**: Check output in `data/processed/` or data warehouse
+4. **Run tests**: `pytest tests/pipelines/test_[pipeline_name].py`
+5. **Deploy to production**: [Deployment command or Airflow DAG]
 
-### [Task Category 3 - e.g., Working with External APIs]
+### Adding New Features (to datasets)
 
-**Example: Integrating a new external service**
+**Example: Engineering a new feature for model input**
 
-1. **Add API client** to `[services folder]/[service_name].py`
-2. **Add environment variables** to `.env` and `.env.example`
-3. **Implement rate limiting** (see `[example file]` for pattern)
-4. **Add error handling** for API failures
-5. **Write integration tests** in `tests/integration/`
+1. **Implement feature**: Add to `features/[feature_name].py`
+2. **Add to pipeline**: Register in feature engineering pipeline
+3. **Validate**: Check feature distributions in `notebooks/eda/[feature_name]_validation.ipynb`
+4. **Backfill**: Run backfill for historical data if needed
+5. **Update schema**: Document in `docs/data_dictionary.md` or feature store
 
 ### Updating Documentation
 
@@ -306,43 +407,49 @@ your-project/
 
 ## Known Issues & Solutions
 
-### ✅ RESOLVED: [Issue Title]
-**Issue**: [Description of the problem]
-**Solution**: [How it was fixed]
-**Location**: `[file:line]` or `[configuration]`
+Document issues as they arise using this format:
 
-### 🔄 IN PROGRESS: [Issue Title]
-**Issue**: [Description of the problem]
-**Current Status**: [What's being done about it]
-**Tracking**: [Link to GitHub issue or PROJECT_PLAN.md section]
-
-### ⚠️ KNOWN LIMITATION: [Issue Title]
-**Issue**: [Description of the limitation]
-**Workaround**: [How to work around it]
-**Future**: [Plans to address it, link to ROADMAP.md if applicable]
+**[✅ RESOLVED | 🔄 IN PROGRESS | ⚠️ KNOWN LIMITATION]: [Issue Title]**
+- **Issue**: [Description]
+- **Solution/Workaround**: [How it's fixed or worked around]
+- **Location**: `[file:line]` or [GitHub issue link]
 
 ---
 
 ## Best Practices
 
-### [Category 1 - e.g., Code Organization]
+Document project-specific patterns and conventions as they emerge. Add entries when you establish a pattern worth following consistently.
 
-1. **[Practice 1]**: [Description and rationale]
-2. **[Practice 2]**: [Description and rationale]
-3. **[Practice 3]**: [Description and rationale]
+### Example: Experiment Naming
 
-### [Category 2 - e.g., Error Handling]
+**Pattern**: `[model-type]_[feature-set]_[YYYYMMDD]_[initials]`
 
-1. **[Practice 1]**: [Description]
-   ```[language]
-   [code example]
-   ```
-2. **[Practice 2]**: [Description]
+**Rationale**: Enables sorting by date, filtering by model type, and identifying owner
 
-### [Category 3 - e.g., Performance]
+```bash
+# Good
+bert_baseline_20250115_jd
+xgboost_full_features_20250116_sm
 
-1. **[Practice 1]**: [Description and when to use]
-2. **[Practice 2]**: [Description and when to use]
+# Avoid
+experiment_1
+final_model_v2
+```
+
+### Example: Data Validation
+
+**Pattern**: Always validate data schema at pipeline boundaries
+
+**Rationale**: Catches data drift early, prevents silent failures in training
+
+```python
+# Validate before training
+schema.validate(df)  # Raises if schema mismatch
+```
+
+---
+
+**Add your own practices here as the project evolves. Common categories**: Model versioning, code organization, error handling, testing patterns.
 
 ---
 
@@ -350,43 +457,17 @@ your-project/
 
 ```bash
 # Development
-[command]                    # [Description]
-[command]                    # [Description]
+[command]                              # [Description]
+
+# Training & Experiments
+[command]                              # [Description]
+
+# Data Pipelines
+[command]                              # [Description]
 
 # Testing
-[command]                    # [Description]
-[command]                    # [Description]
-
-# Database
-[command]                    # [Description]
-[command]                    # [Description]
-
-# Deployment
-[command]                    # [Description]
-[command]                    # [Description]
-
-# Utilities
-[command]                    # [Description]
-[command]                    # [Description]
+[command]                              # [Description]
 ```
-
----
-
-## Additional Resources
-
-### Internal Documentation
-- **[ROADMAP.md](ROADMAP.md)**: Strategic vision and quarterly goals
-- **[PROJECT_PLAN.md](PROJECT_PLAN.md)**: Current sprint/iteration plans
-- **[CHANGELOG.md](CHANGELOG.md)**: Detailed feature and change history
-- **[docs/ADVANCED_FEATURES.md](docs/ADVANCED_FEATURES.md)**: Optional documentation patterns
-
-### Module-Specific Documentation
-- **[Module 1]**: `[path/to/module/CLAUDE.md]` - [Brief description]
-- **[Module 2]**: `[path/to/module/CLAUDE.md]` - [Brief description]
-
-### External Resources
-- **[Resource 1]**: [Link and description]
-- **[Resource 2]**: [Link and description]
 
 ---
 
