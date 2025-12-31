@@ -20,20 +20,20 @@ This framework encourages building with a product and project focused mindset fr
    - **Higher level** (strategic): "Why are we building this? What's the vision?" → ROADMAP.md
    - **Lower level** (implementation): "How does this module work? What patterns do we use?" → CLAUDE.md
 
-2. **Right-sized context**: Agents find exactly what they need in <30 seconds, at the right level of detail
+2. **Right-sized context**: Makes it easier and quicker for agents to find exactly what they need, at the right level of detail
 
 3. **Strategic alignment**: Clear separation between vision (ROADMAP) and execution (PROJECT_PLAN) ensures agents understand both what to build and why
 
-4. **Zero workflow interruption**: Documentation helps rather than hinders development, supporting seamless context switching
+4. **Workflow-aware design**: Aims to reduce documentation friction through focused context and batch updates, minimising the cost of finding and maintaining documentation
 
 ---
 
 ## Success Criteria
 
 This framework is working when:
-- ✅ Developers find the correct documentation in **under 30 seconds** from any entry point
+- ✅ Developers can quickly find the correct documentation from any entry point
 - ✅ AI agents receive **exactly the context they need** without excess
-- ✅ Documentation updates cause **zero workflow interruption**
+- ✅ Documentation updates have **minimal workflow disruption**
 - ✅ Strategic decisions are **preserved and discoverable** months later
 
 ---
