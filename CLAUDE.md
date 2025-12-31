@@ -254,12 +254,12 @@ your-project/
 **When to update each document**:
 
 - **ROADMAP.md**: When strategic goals change (quarterly review)
-- **PROJECT_PLAN.md**: When sprint/iteration plans change (weekly/biweekly)
+- **PROJECT_PLAN.md**: When completing major initiatives, or when current focus/blockers change (weekly/biweekly)
 - **CLAUDE.md** (root): When project structure, setup, or common tasks change
 - **CLAUDE.md** (subfolder): When module architecture or patterns change
 - **CHANGELOG.md**: When releasing a new version or completing significant features
 
-**Documentation Debt Tracking**: See [PROJECT_PLAN.md#documentation-debt](PROJECT_PLAN.md#documentation-debt) for tracking doc TODOs.
+**Documentation Debt Tracking**: See [CONTRIBUTING.md#documentation-practices](CONTRIBUTING.md#documentation-practices) for how to track and manage documentation debt.
 
 ---
 

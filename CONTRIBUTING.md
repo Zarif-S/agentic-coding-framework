@@ -128,6 +128,73 @@ Then create a Pull Request on GitHub with:
 
 ---
 
+## Documentation Practices
+
+### Simple Rule: Update Docs When You Change Code
+
+When you change code, update the docs. If you can't do it immediately, track it.
+
+### Where to Track Documentation Gaps
+
+**Option 1: Inline TODOs** (for quick reminders)
+```markdown
+<!-- TODO: Update architecture diagram after pipeline refactor -->
+<!-- TODO: Add example of error handling pattern - see PR #123 -->
+```
+
+**Option 2: GitHub Issues** (for work needing dedicated time)
+- Create an issue with the `documentation` label
+- Link to the PR/commit that created the gap
+- Describe what needs updating and why
+
+**Which to use?**
+- **Inline TODO**: Small fixes, reminders, will address soon
+- **GitHub Issue**: Larger work, needs discussion, or stale TODOs (2+ weeks old)
+
+### Documentation Update Checklist
+
+When completing a task or merging a PR, ask: **"Which docs does this affect?"**
+
+- [ ] **ROADMAP.md** - Strategic direction or quarterly milestones changed?
+- [ ] **PROJECT_PLAN.md** - Major initiative completed? New blockers?
+- [ ] **CLAUDE.md** (root) - Setup, project structure, or common tasks changed?
+- [ ] **CLAUDE.md** (subfolder) - Module architecture or patterns changed?
+- [ ] **CHANGELOG.md** - User-facing feature, breaking change, or significant improvement?
+- [ ] **Code comments** - Complex logic that needs explanation?
+
+**If yes to any**: Update the doc, add a TODO, or create an issue.
+
+### During Code Review
+
+**Reviewer's job**: Ask "Are docs updated or is there a TODO/issue?"
+
+That's the enforcement mechanism. Simple and effective.
+
+### Examples
+
+**Good inline TODO**:
+```markdown
+<!-- TODO: Add multi-tenant query examples after PR #145 merges -->
+```
+
+**Good GitHub Issue**:
+```
+Title: Update authentication flow in api-service/CLAUDE.md
+
+Labels: documentation
+
+Description:
+PR #123 changed auth from OAuth2 → JWT.
+Need to update api-service/CLAUDE.md:
+- Architecture diagram
+- Code examples
+- Environment variables
+
+Related: PR #123
+```
+
+---
+
 ## Framework Philosophy
 
 When contributing, keep these principles in mind:
