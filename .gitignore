@@ -1,0 +1,40 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts (customize based on your stack)
+dist/
+build/
+*.pyc
+__pycache__/
+node_modules/
+
+# Test coverage
+coverage/
+.coverage
+*.cover
+
+# Cache directories
+.cache/
+.pytest_cache/
