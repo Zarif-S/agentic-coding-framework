@@ -179,8 +179,8 @@ Provides a structured way to acknowledge documentation gaps without blocking dev
 
 | Item | Type | Last Updated | Reason | Assignee |
 |------|------|--------------|--------|----------|
-| `ml-workflow/CLAUDE.md` - Training flow | Outdated | 2024-12-15 | Updated to distributed training, docs show single-node | Alice |
-| `ROADMAP.md` - Q2 goals | Missing | N/A | Strategic pivot, needs new milestones | Bob |
+| `ml-workflow/CLAUDE.md` - Training flow | Outdated | 2024-12-15 | Updated to distributed training, docs show single-node | [Assignee] |
+| `ROADMAP.md` - Q2 goals | Missing | N/A | Strategic pivot, needs new milestones | [Assignee] |
 ```
 
 ### Workflow
@@ -261,7 +261,7 @@ When a conflict is detected, document it:
 
 **Detected**: 2025-01-31
 **Severity**: 🔴 CRITICAL
-**Reporter**: Alice
+**Reporter**: [Team Member]
 
 ### Contradiction
 
@@ -541,8 +541,8 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 
 | Issue | Root Cause | Action | Owner | Due |
 |-------|------------|--------|-------|-----|
-| [e.g., "Can't find auth docs quickly"] | [e.g., "Auth split across 3 files"] | [e.g., "Consolidate in auth/CLAUDE.md"] | Alice | Q3 Sprint 1 |
-| [e.g., "ROADMAP.md too detailed"] | [e.g., "Tactical items creeping in"] | [e.g., "Review and move tactical to PROJECT_PLAN"] | Bob | 2025-07-15 |
+| [e.g., "Can't find auth docs quickly"] | [e.g., "Auth split across 3 files"] | [e.g., "Consolidate in auth/CLAUDE.md"] | [Team Member] | Q3 Sprint 1 |
+| [e.g., "ROADMAP.md too detailed"] | [e.g., "Tactical items creeping in"] | [e.g., "Review and move tactical to PROJECT_PLAN"] | [Team Member] | 2025-07-15 |
 
 #### Part 5: Framework Adaptation (10 minutes)
 
@@ -557,7 +557,7 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 ### Sample Retrospective Outcome
 
 **Date**: 2025-04-15
-**Attendees**: Alice, Bob, Charlie, Claude (AI agent)
+**Attendees**: [Team members], Claude (AI agent)
 
 **Metrics**:
 - Time to find info: 30s avg ✅ (target met)
@@ -570,8 +570,8 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 - ⚠️ ROADMAP.md has some tactical items that belong in PROJECT_PLAN.md
 
 **Action Items**:
-1. Alice: Add 3 code examples to ml-workflow/CLAUDE.md by 2025-04-30
-2. Bob: Review ROADMAP.md, move tactical items to PROJECT_PLAN.md by 2025-04-22
+1. [Team Member 1]: Add 3 code examples to ml-workflow/CLAUDE.md by 2025-04-30
+2. [Team Member 2]: Review ROADMAP.md, move tactical items to PROJECT_PLAN.md by 2025-04-22
 3. Team: Allocate 20% of next sprint to clearing documentation debt
 
 **Framework Changes**:

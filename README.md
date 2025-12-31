@@ -205,6 +205,52 @@ Use this framework freely in your projects, commercial or personal.
 
 ---
 
+## Future Improvements
+
+This framework is designed to evolve. Potential enhancements being considered:
+
+### 1. Specialized Sub-Agents Support
+
+**Concept**: Documentation patterns for teams using different LLMs for different purposes
+
+**Examples**:
+- Gemini for code reviews
+- Claude Code for coding and implementation
+- OpenAI for brainstorming and ideation
+- Specialized models for data science workflows
+
+**Value**: Guide teams on how to document when different AI agents handle different aspects of development
+
+### 2. Compound Engineering Integration
+
+**Resource**: [Compound Engineering Plugin](https://github.com/EveryInc/compound-engineering-plugin)
+
+**Concept**: Integrate compound engineering principles into the documentation framework
+
+**Value**: Enhanced patterns for building complex systems with clear documentation boundaries
+
+### 3. Automation Tooling
+
+**Validation Script** (`scripts/check_docs.sh`):
+- Detect broken internal links
+- Find inconsistent terminology
+- Verify hierarchical structure
+- Check documentation debt items
+
+**GitHub Actions Workflow**:
+- Automated doc checks on pull requests
+- Link validation in CI/CD
+- Documentation coverage reporting
+
+**Pre-commit Hooks**:
+- Remind developers to update relevant docs
+- Validate markdown formatting
+- Check for placeholder text
+
+**Status**: Mentioned in [GitHub Issue #5](https://github.com/JamesCAlger/cosmos/issues/5) but not yet implemented. Focus is on establishing manual patterns first, then automate when pain points are clear.
+
+---
+
 ## Acknowledgments
 
 This framework emerged from practical experience using AI coding assistants for coding and optimising documentation during onboarding, particularly when using [Claude Code](https://claude.com/claude-code).
