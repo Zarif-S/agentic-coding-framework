@@ -8,15 +8,23 @@ This framework encourages building with a product and project focused mindset fr
 
 ## Why This Framework Exists
 
-**The Problem**: AI coding agents need context to be effective. Traditional documentation approaches either:
+**The Problem**: AI coding agents require context to work effectively. Traditional documentation approaches either:
 - Provide too much context (overwhelming, slow to parse)
 - Provide too little context (agents make wrong assumptions)
 - Lack strategic clarity (agents can't align with long-term vision)
+- Force agents to rebuild context from scratch on every interaction
 
-**The Solution**: A hierarchical documentation system that provides:
-1. **Right-sized context**: Agents find exactly what they need in <30 seconds
-2. **Strategic alignment**: Clear separation between vision (ROADMAP) and execution (PROJECT_PLAN)
-3. **Zero workflow interruption**: Documentation helps rather than hinders development
+**The Solution**: A hierarchical documentation system that enables rapid context rebuilding at any altitude:
+
+1. **Multi-level context access**: Agents can quickly rebuild context from either:
+   - **Higher level** (strategic): "Why are we building this? What's the vision?" → ROADMAP.md
+   - **Lower level** (implementation): "How does this module work? What patterns do we use?" → CLAUDE.md
+
+2. **Right-sized context**: Agents find exactly what they need in <30 seconds, at the right level of detail
+
+3. **Strategic alignment**: Clear separation between vision (ROADMAP) and execution (PROJECT_PLAN) ensures agents understand both what to build and why
+
+4. **Zero workflow interruption**: Documentation helps rather than hinders development, supporting seamless context switching
 
 ---
 
