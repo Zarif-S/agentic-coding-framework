@@ -2,6 +2,8 @@
 
 This repo outlines an approach to coding in the era of AI agents. It maximizes the value of strategic decisions and maintains clear documentation for optimal context efficiency when working with AI coding assistants.
 
+This framework encourages building with a product and project focused mindset from the outset, ensuring technical decisions align with strategic goals.
+
 ---
 
 ## Why This Framework Exists
@@ -83,7 +85,7 @@ cp agentic-coding-framework/PROJECT_PLAN.md your-project/
 cp agentic-coding-framework/CHANGELOG.md your-project/
 
 # Copy example subfolder CLAUDE.md
-cp agentic-coding-framework/examples/api-service/CLAUDE.md your-project/src/your-module/
+cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
 ```
 
 ### 2. Customize for Your Project
@@ -146,9 +148,9 @@ Once you're comfortable with the core framework, explore these optional patterns
 
 ## Real-World Example
 
-See the `examples/api-service/` folder for a minimal working example showing:
+See the `examples/ml-workflow/` folder for a minimal working example showing:
 - Task-based navigation in root `CLAUDE.md`
-- Subfolder `CLAUDE.md` for a specific module
+- Subfolder `CLAUDE.md` for a data science/ML module
 - Breadcrumb navigation between docs
 - Strategic vs tactical separation (ROADMAP vs PROJECT_PLAN)
 
@@ -205,9 +207,13 @@ Use this framework freely in your projects, commercial or personal.
 
 ## Acknowledgments
 
-This framework emerged from practical experience optimizing documentation for AI coding assistants, particularly [Claude Code](https://claude.com/claude-code).
+This framework emerged from practical experience using AI coding assistants for coding and optimising documentation during onboarding, particularly when using [Claude Code](https://claude.com/claude-code).
 
 Inspired by the need to maintain clarity and strategic alignment in fast-moving AI-assisted development environments.
+
+**Research**: A research paper by MIT that aligns with this philosophy: https://arxiv.org/abs/2508.14511
+
+**Contributors**: Thanks to James Algers for contributing.
 
 ---
 

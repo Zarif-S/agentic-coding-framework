@@ -81,7 +81,7 @@ For larger projects (10+ documented modules), consider creating a **DOCS.md** in
 [e.g., Python 3.11+, Node.js 18+, etc.]
 
 # [Package Manager]
-[e.g., pip, npm, yarn, etc.]
+[e.g., pip, poetry, uv, npm, yarn, etc.]
 
 # [Other Requirements]
 [e.g., Docker, PostgreSQL, Redis, etc.]

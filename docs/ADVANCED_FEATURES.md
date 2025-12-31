@@ -6,7 +6,7 @@ This guide covers optional patterns for teams that need more sophisticated docum
 
 - **New to this framework?** → [README.md](../README.md) for overview
 - **Looking for core templates?** → [Root CLAUDE.md](../CLAUDE.md), [ROADMAP.md](../ROADMAP.md), [PROJECT_PLAN.md](../PROJECT_PLAN.md)
-- **Looking for examples?** → [examples/api-service/](../examples/api-service/)
+- **Looking for examples?** → [examples/ml-workflow/](../examples/ml-workflow/)
 
 ---
 
@@ -52,39 +52,35 @@ Quick reference to all documentation in this project.
 
 ## Architecture Documentation
 
-### Backend Services
+### Data Pipelines
 ```
-src/
-├── api-service/
-│   └── CLAUDE.md ────────── API endpoints, request flow, middleware
-├── auth-service/
-│   └── CLAUDE.md ────────── Authentication, JWT, user sessions
-├── data-pipeline/
-│   └── CLAUDE.md ────────── ETL processes, data transformations
-└── worker-service/
-    └── CLAUDE.md ────────── Background jobs, queue processing
+data/
+├── ingestion/
+│   └── CLAUDE.md ────────── Data sources, loading, validation
+├── preprocessing/
+│   └── CLAUDE.md ────────── Cleaning, normalization, transforms
+└── features/
+    └── CLAUDE.md ────────── Feature engineering, selection
 ```
 
-### Frontend Components
+### Models
 ```
-frontend/
-├── components/
-│   └── CLAUDE.md ────────── UI component architecture, design system
-├── state-management/
-│   └── CLAUDE.md ────────── Redux/Context patterns, data flow
-└── routing/
-    └── CLAUDE.md ────────── Route structure, navigation guards
+models/
+├── training/
+│   └── CLAUDE.md ────────── Training loops, hyperparameters, checkpoints
+├── evaluation/
+│   └── CLAUDE.md ────────── Metrics, validation, error analysis
+└── registry/
+    └── CLAUDE.md ────────── Model versioning, MLflow/ZenML setup
 ```
 
-### Infrastructure
+### Experiments
 ```
-infrastructure/
-├── database/
-│   └── CLAUDE.md ────────── Schema design, migrations, indexes
-├── caching/
-│   └── CLAUDE.md ────────── Redis patterns, cache invalidation
-└── deployment/
-    └── CLAUDE.md ────────── CI/CD, Docker, Kubernetes configs
+experiments/
+├── notebooks/
+│   └── CLAUDE.md ────────── Notebook organization, EDA patterns
+└── tracking/
+    └── CLAUDE.md ────────── Experiment logs, reproducibility
 ```
 
 ## Specialized Documentation
@@ -183,7 +179,7 @@ Provides a structured way to acknowledge documentation gaps without blocking dev
 
 | Item | Type | Last Updated | Reason | Assignee |
 |------|------|--------------|--------|----------|
-| `api-service/CLAUDE.md` - Auth flow | Outdated | 2024-12-15 | Changed to OAuth2, docs show old JWT flow | Alice |
+| `ml-workflow/CLAUDE.md` - Training flow | Outdated | 2024-12-15 | Updated to distributed training, docs show single-node | Alice |
 | `ROADMAP.md` - Q2 goals | Missing | N/A | Strategic pivot, needs new milestones | Bob |
 ```
 
@@ -413,38 +409,38 @@ api-gateway/
 
 **Before** (Root CLAUDE.md getting too long):
 ```markdown
-## API Service Architecture
+## ML Workflow Architecture
 
-The API service handles all HTTP requests... [500 words]
+The ML workflow handles end-to-end machine learning... [500 words]
 
-### Middleware Layer
-Middleware processes requests... [300 words]
+### Data Pipeline
+Data ingestion and preprocessing... [300 words]
 
-### Validation
-We use Pydantic for validation... [400 words]
+### Model Training
+Training loops and experiment tracking... [400 words]
 
-[Total: 1200 words just on API service]
+[Total: 1200 words just on ML workflow]
 ```
 
 **After Split**:
 
 **Root CLAUDE.md**:
 ```markdown
-## API Service Architecture
+## ML Workflow Architecture
 
-The API service provides RESTful endpoints for user and item management.
+The ML workflow handles end-to-end ML pipeline from data to trained models.
 
-**Architecture**: Request → Middleware → Validation → Service Layer → Response
+**Architecture**: Raw Data → Preprocessing → Feature Engineering → Training → Evaluation
 
-**See**: `api-service/CLAUDE.md` for detailed architecture, design patterns, and integration guide.
+**See**: `ml-workflow/CLAUDE.md` for detailed architecture, design patterns, and experiment tracking.
 ```
 
-**api-service/CLAUDE.md**:
+**ml-workflow/CLAUDE.md**:
 ```markdown
-# API Service Module - Architecture & Patterns
+# ML Workflow Module - Data Science Documentation Example
 
 ## 📍 Breadcrumbs
-- **New to the project?** → [Root CLAUDE.md](../CLAUDE.md)
+- **New to the project?** → [Root CLAUDE.md](../../CLAUDE.md)
 
 [Full detailed content - 1200 words]
 ```
@@ -452,9 +448,9 @@ The API service provides RESTful endpoints for user and item management.
 ### Folder Naming for Documentation
 
 **Good folder names** (clear documentation targets):
-- `api-service/` (functional area)
-- `auth/` (specific responsibility)
-- `data-pipeline/` (clear architecture)
+- `ml-workflow/` (functional area)
+- `feature-engineering/` (specific responsibility)
+- `model-training/` (clear architecture)
 
 **Avoid** (too granular for CLAUDE.md):
 - `utils/` (catch-all, no specific architecture)
@@ -570,11 +566,11 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 
 **Key Findings**:
 - ✅ Task navigation in root CLAUDE.md working well
-- ⚠️ API service CLAUDE.md needs more examples
+- ⚠️ ML workflow CLAUDE.md needs more examples
 - ⚠️ ROADMAP.md has some tactical items that belong in PROJECT_PLAN.md
 
 **Action Items**:
-1. Alice: Add 3 code examples to api-service/CLAUDE.md by 2025-04-30
+1. Alice: Add 3 code examples to ml-workflow/CLAUDE.md by 2025-04-30
 2. Bob: Review ROADMAP.md, move tactical items to PROJECT_PLAN.md by 2025-04-22
 3. Team: Allocate 20% of next sprint to clearing documentation debt
 
