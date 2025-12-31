@@ -48,9 +48,10 @@
 Raw Data
     ↓
 ┌────────────────────────────────────────────────┐
-│ 1. Data Ingestion                              │
+│ 1. Data Ingestion & Validation                 │
 │    • Load from sources (CSV, database, API)    │
-│    • Initial validation                        │
+│    • Schema & data quality validation          │
+│    • See: Testing Strategy > Data Validation   │
 └────────────────────────────────────────────────┘
     ↓
 ┌────────────────────────────────────────────────┐

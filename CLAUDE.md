@@ -163,6 +163,7 @@ your-project/
 ├── ROADMAP.md                # Strategic vision (quarters/years)
 ├── PROJECT_PLAN.md           # Tactical execution (weeks/months)
 ├── CHANGELOG.md              # Feature and change history
+├── CONTRIBUTING.md           # Contributor guidelines
 └── [config files]            # [e.g., package.json, requirements.txt, etc.]
 ```
 

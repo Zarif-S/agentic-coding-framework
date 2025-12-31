@@ -49,6 +49,7 @@ Quick reference to all documentation in this project.
 - **[ROADMAP.md](ROADMAP.md)** - Strategic vision (quarters/years)
 - **[PROJECT_PLAN.md](PROJECT_PLAN.md)** - Current sprint/iteration plans
 - **[CHANGELOG.md](CHANGELOG.md)** - Feature and change history
+- **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Contributor guidelines
 
 ## Architecture Documentation
 

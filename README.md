@@ -41,6 +41,7 @@ your-project/
 ├── ROADMAP.md                   # Strategic vision (quarters/years)
 ├── PROJECT_PLAN.md              # Tactical execution (weeks/months)
 ├── CHANGELOG.md                 # Feature and change history
+├── CONTRIBUTING.md              # Contributor guidelines
 │
 └── src/
     └── your-module/
@@ -257,7 +258,8 @@ This framework emerged from practical experience using AI coding assistants for 
 
 Inspired by the need to maintain clarity and strategic alignment in fast-moving AI-assisted development environments.
 
-**Research**: A research paper by MIT that aligns with this philosophy: https://arxiv.org/abs/2508.14511
+**Research**: The philosophy of this framework is supported by research from MIT, notably:
+Meng, E. and Jackson, D. (2025). *What You See Is What It Does: A Structural Pattern for Legible Software*. Available at: https://arxiv.org/abs/2508.14511.
 
 **Contributors**: Thanks to James Algers for contributing.
 
