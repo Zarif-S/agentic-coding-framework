@@ -163,40 +163,24 @@ Provides a structured way to acknowledge documentation gaps without blocking dev
 
 ### Implementation
 
-**Location**: [PROJECT_PLAN.md - Documentation Debt section](../PROJECT_PLAN.md#documentation-debt)
+**Simple Approach** (recommended): See [CONTRIBUTING.md - Documentation Practices](../CONTRIBUTING.md#documentation-practices) for lightweight tracking using:
+- Inline `TODO:` comments in documentation files
+- GitHub Issues with `documentation` label
+- Code review enforcement
 
-**Severity Levels**:
+**Advanced Tracking** (for larger teams): Track documentation debt in PROJECT_PLAN.md or a dedicated tracker
 
-| Priority | When to Use | SLA |
-|----------|-------------|-----|
-| **High** | New architecture not documented, onboarding blockers | Current sprint |
-| **Medium** | Missing examples, incomplete integration guides | Next sprint |
-| **Low** | Minor inconsistencies, missing diagrams | Backlog |
-
-**Tracking Format**:
-
-```markdown
-### High Priority (Address This Sprint)
-
-| Item | Type | Last Updated | Reason | Assignee |
-|------|------|--------------|--------|----------|
-| `ml-workflow/CLAUDE.md` - Training flow | Outdated | 2024-12-15 | Updated to distributed training, docs show single-node | [Assignee] |
-| `ROADMAP.md` - Q2 goals | Missing | N/A | Strategic pivot, needs new milestones | [Assignee] |
-```
-
-### Workflow
-
-1. **Acknowledge debt**: When completing a task, if docs aren't updated, add to debt tracker
-2. **Categorize**: Assign priority (High/Medium/Low)
-3. **Review weekly**: During sprint planning, allocate time for high-priority items
-4. **Track metrics**: Monitor trend (debt increasing or decreasing?)
+**Priority Levels**:
+- **High**: New architecture undocumented, onboarding blockers → Address current sprint
+- **Medium**: Missing examples, incomplete guides → Next sprint
+- **Low**: Minor inconsistencies, missing diagrams → Backlog
 
 ### Best Practices
 
 1. **Don't let high priority accumulate**: If >5 high-priority items, halt new features
-2. **Celebrate resolution**: Track completed items to show progress
-3. **Root cause analysis**: If debt consistently builds up, adjust Definition of Done
-4. **Time allocation**: Reserve 10-15% of sprint capacity for documentation
+2. **Root cause analysis**: If debt builds up consistently, strengthen Definition of Done
+3. **Time allocation**: Reserve 10-15% of sprint capacity for documentation
+4. **Code review enforcement**: Reviewer asks "Does this need documentation?" in every PR
 
 ---
 
@@ -300,30 +284,13 @@ Run this checklist before major releases or quarterly:
 ```markdown
 ## Documentation Consistency Checklist
 
-### Architectural Alignment
-- [ ] Root CLAUDE.md architecture overview matches subfolder CLAUDE.md details
+- [ ] Root CLAUDE.md architecture matches subfolder CLAUDE.md details
 - [ ] ROADMAP.md strategic decisions reflected in implementation docs
 - [ ] Technology choices consistent across all CLAUDE.md files
-
-### Terminology
-- [ ] Consistent naming for patterns (e.g., "repository" vs "DAO")
-- [ ] Consistent naming for components/services
-- [ ] Consistent acronym definitions
-
-### Setup & Configuration
-- [ ] Environment variables consistent across docs
-- [ ] Version requirements match (Python, Node, etc.)
-- [ ] Installation steps don't conflict
-
-### Code Examples
-- [ ] Code style consistent across examples
-- [ ] Import statements match actual project structure
-- [ ] Examples use current APIs (not deprecated)
-
-### Cross-References
-- [ ] All internal links working
-- [ ] Referenced sections exist
-- [ ] No circular contradictions in linked docs
+- [ ] Consistent naming for patterns, components, and acronyms
+- [ ] Environment variables and version requirements consistent
+- [ ] Code examples use current APIs and match project structure
+- [ ] All internal links working, no circular contradictions
 ```
 
 ---

@@ -366,42 +366,57 @@ your-project/
 
 ## Important Implementation Notes
 
-### [Category 1 - e.g., API Rate Limiting]
+### Feature Engineering Pattern
 
-**Issue**: [Describe the constraint or consideration]
+**Issue**: Need consistent approach to creating and validating features across the project
 
-**Solution**: [Describe the approach implemented]
+**Solution**: Feature classes with built-in validation and versioning
 
-**Location**: `[file path:line number]`
+**Location**: `features/base_feature.py:15-45`
 
 **Example**:
-```[language]
-[code example showing the pattern]
+```python
+class Feature(BaseFeature):
+    version = "1.0"
+
+    def transform(self, df):
+        # Feature logic here
+        df['new_feature'] = df['col_a'] * df['col_b']
+        return df
+
+    def validate(self, df):
+        # Validation logic
+        assert df['new_feature'].isnull().sum() == 0
+        assert df['new_feature'].min() >= 0
 ```
 
-### [Category 2 - e.g., Caching Strategy]
+### Model Versioning Strategy
 
-**Issue**: [Describe the problem this solves]
+**Issue**: Need to track model versions, experiments, and artifacts consistently
 
-**Solution**: [Describe the caching approach]
+**Solution**: Semantic versioning for models (vX.Y.Z) with MLflow tracking
 
-**Location**: `[file path:line number]`
+**Location**: `models/registry.py:20-60`
 
 **Usage**:
-```[language]
-[code example]
+```python
+# models/v2_1_0/
+# Version format: v{architecture}.{feature_set}.{patch}
+# v2.1.0 = architecture v2, feature set v1, patch 0
+model = load_model("models/v2_1_0/model.pkl")
+metadata = load_metadata("models/v2_1_0/metadata.json")
 ```
 
-### [Category 3 - e.g., Authentication Flow]
+### Data Validation Approach
 
-**Overview**: [High-level description]
+**Overview**: Validate data quality at pipeline boundaries to catch issues early
 
 **Key Components**:
-1. **[Component 1]**: [Purpose and location]
-2. **[Component 2]**: [Purpose and location]
-3. **[Component 3]**: [Purpose and location]
+1. **Schema Validation**: Great Expectations suite in `data/validation/schemas/`
+2. **Distribution Checks**: Statistical tests in `data/validation/distributions.py`
+3. **Quality Metrics**: Automated dashboard in `data/validation/dashboard/`
 
-**See**: `[module/CLAUDE.md]` for detailed authentication architecture
+**See**: `data/CLAUDE.md` for detailed validation architecture and implementation examples
 
 ---
 
