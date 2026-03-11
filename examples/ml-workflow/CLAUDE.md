@@ -4,7 +4,7 @@
 - **Project setup** → [Root CLAUDE.md](../../CLAUDE.md)
 - **Strategic context** → [ROADMAP.md](../../ROADMAP.md)
 - **Current sprint** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
-- **Cross-module flows** → [SYNCHRONIZATIONS.md](../../SYNCHRONIZATIONS.md)
+- **Cross-module flows** → [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md)
 
 > **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in SYNCHRONIZATIONS.md — not here.
 

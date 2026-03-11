@@ -116,6 +116,57 @@ When working with Claude Code or other AI assistants:
 
 ---
 
+## Working with AI Agents
+
+The framework changes the *order of operations* for building with an agent, not just how things are documented. The key shift: **design your concepts before writing any code**. This gives the agent tight boundaries to work within and surfaces coordination decisions early — when they're cheap to change.
+
+### The four-step workflow
+
+**1. Define your concepts first**
+
+Before touching code, ask the agent to draft the concepts your project needs:
+
+> "I'm building a project that [brief description]. Using the concept spec format in `examples/ml-workflow/CLAUDE.md`, draft the concepts we need and their state/actions/invariants. Don't write any code yet."
+
+Review what it proposes. Maybe two concepts collapse into one, or a concept is too thin to justify its own module. This conversation is fast — getting it wrong in a spec is a 5-minute fix; getting it wrong in code is a refactor.
+
+**2. Write the specs and SYNCHRONIZATIONS.md**
+
+Once you've agreed on concepts, ask the agent to create the subfolder CLAUDE.md files and populate SYNCHRONIZATIONS.md:
+
+> "Create a CLAUDE.md for each concept using the format in `examples/ml-workflow/CLAUDE.md`. Then populate `SYNCHRONIZATIONS.md` with the cross-concept flows."
+
+Review the sync entries. If a coordination feels wrong, fix the spec now. This is your coordination map before any implementation exists.
+
+**3. Implement one concept at a time**
+
+Scope each coding task strictly to one concept:
+
+> "Implement the `[Concept]` concept. Follow the spec in `[path]/CLAUDE.md` exactly. Do not import from any other concept. Write unit tests that verify the invariants."
+
+Repeat for each concept. Each task is self-contained — the agent has a tight spec and a clear rule about what it must not touch.
+
+**4. Implement the coordinator last**
+
+Once all concepts are implemented and tested in isolation:
+
+> "Read `SYNCHRONIZATIONS.md`. Create `coordinator.py` with one function per SYNC entry. This is the only file allowed to import from multiple concepts."
+
+The agent translates each SYNC entry directly into a function. If an entry is ambiguous, it surfaces now — not mid-implementation.
+
+### The discipline that makes it work
+
+Keep prompts scoped to one concept or one sync at a time. The instinct is to say "build the whole pipeline" — resist it. The framework only pays off if the agent operates within concept boundaries, and it will as long as your prompts respect them too.
+
+### What this buys you
+
+- **Smaller agent tasks**: Each prompt has a clear boundary. The agent isn't holding the whole system in context at once.
+- **Invariants as a safety net**: The agent knows from the spec what must hold after each action. You don't have to restate constraints in every prompt.
+- **Easier debugging**: If something breaks, the concept boundaries tell you exactly where to look.
+- **Safe iteration**: Changing a threshold or adding a downstream effect means updating one SYNC entry and the coordinator — neither concept doc changes.
+
+---
+
 ## Advanced Features (Tier 2)
 
 Once you're comfortable with the core framework, explore these optional patterns:
@@ -160,11 +211,15 @@ Once you're comfortable with the core framework, explore these optional patterns
 
 ## Real-World Example
 
-See the `examples/ml-workflow/` folder for a minimal working example showing:
-- Task-based navigation in root `CLAUDE.md`
-- Subfolder `CLAUDE.md` for a data science/ML module
-- Breadcrumb navigation between docs
-- Strategic vs tactical separation (ROADMAP vs PROJECT_PLAN)
+See the `examples/` folder for a two-concept worked example showing the full framework in action:
+
+| File | What it demonstrates |
+|------|----------------------|
+| `examples/ml-workflow/CLAUDE.md` | Concept spec (state, actions, invariants) for a self-contained MLWorkflow concept |
+| `examples/deployment/CLAUDE.md` | Concept spec for a self-contained Deployment concept |
+| `examples/SYNCHRONIZATIONS.md` | How the two concepts coordinate — without either knowing about the other |
+
+The SYNCHRONIZATIONS.md is the key file to read: it shows what a real sync entry looks like and explains *why* the coordination lives here instead of in either concept's doc.
 
 ---
 
