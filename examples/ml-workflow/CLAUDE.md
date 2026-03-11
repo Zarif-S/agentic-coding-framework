@@ -1,279 +1,167 @@
-# ML Workflow Module - Data Science Documentation Example
+# [Module Name] - [Your Project Name]
 
-## 📍 Breadcrumbs
+## Breadcrumbs
+- **Project setup** → [Root CLAUDE.md](../../CLAUDE.md)
+- **Strategic context** → [ROADMAP.md](../../ROADMAP.md)
+- **Current sprint** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
+- **Cross-module flows** → [SYNCHRONIZATIONS.md](../../SYNCHRONIZATIONS.md)
 
-- **New to the project?** → [Root CLAUDE.md](../../CLAUDE.md) for setup and overview
-- **Looking for strategic context?** → [ROADMAP.md](../../ROADMAP.md)
-- **Looking for current sprint work?** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
-- **Looking for other modules?** → [Root CLAUDE.md - Documentation Navigation](../../CLAUDE.md#-documentation-navigation)
-
----
-
-## When to Read This Doc
-
-**Read this document when**:
-- Building or modifying ML pipelines or experiments
-- Understanding data processing workflows
-- Adding new features or models
-- Tracking experiments and model performance
-
-**Skip this document if**:
-- You just need to set up the project → See [root CLAUDE.md](../../CLAUDE.md)
-- You're working on infrastructure/deployment → See `[deployment/CLAUDE.md]`
+> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in SYNCHRONIZATIONS.md — not here.
 
 ---
 
-## Module Overview
+## Concept Specification
 
-**Purpose**: The ML workflow module handles the end-to-end machine learning pipeline from raw data to trained models.
+**Purpose**: [Single sentence — what user-facing need does this concept serve?]
 
-**Key Responsibilities**:
-- Data ingestion and preprocessing
-- Feature engineering and transformation
-- Model training and evaluation
-- Experiment tracking and reproducibility
+### State
 
-**Not Responsible For**:
-- Data storage infrastructure (see `[storage/CLAUDE.md]`)
-- Model serving/deployment (see `[deployment/CLAUDE.md]`)
-- Data visualization dashboards (see `[dashboards/CLAUDE.md]`)
+| Field | Type | Description |
+|-------|------|-------------|
+| `[field_name]` | `[type]` | [What it holds, who owns it] |
+| `[field_name]` | `[type]` | [What it holds, who owns it] |
+
+### Actions
+
+| Action | Signature | Description |
+|--------|-----------|-------------|
+| `[action]` | `([args]) → [return]` | [What it does] |
+| `[action]` | `([args]) → [return]` | [What it does] |
+
+### Invariants
+
+- [Property that must always hold, e.g. "every record must have a non-null id"]
+- [Data quality or correctness guarantee, e.g. "output shape must match input shape"]
+- [Boundary condition, e.g. "probability outputs must sum to 1.0"]
+
+---
+
+<!--
+  EXAMPLE BELOW: Delete this section and replace with your module's content.
+  The ML Workflow concept is shown as a concrete illustration of the format above.
+-->
+
+## Example: ML Workflow Concept Specification
+
+**Purpose**: Transform raw data into trained, evaluated models ready for deployment.
+
+### State
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `raw_data` | `DataFrame` | Immutable source data, never modified after ingestion |
+| `processed_data` | `DataFrame` | Cleaned and split data owned by this concept |
+| `feature_set` | `List[str]` | Active feature names for current experiment |
+| `model` | `BaseEstimator` | Trained model artifact |
+| `experiment_id` | `str` | MLflow/tracker run ID for current experiment |
+| `metrics` | `Dict[str, float]` | Evaluation results keyed by metric name |
+
+### Actions
+
+| Action | Signature | Description |
+|--------|-----------|-------------|
+| `ingest` | `(source: Path, schema: Schema) → DataFrame` | Load and validate raw data against schema |
+| `preprocess` | `(df: DataFrame, config: PrepConfig) → DataFrame` | Clean, split, normalize |
+| `engineer_features` | `(df: DataFrame, feature_list: List[str]) → DataFrame` | Apply transformations, produce feature matrix |
+| `train` | `(X: DataFrame, y: Series, config: TrainConfig) → Model` | Fit model, log to experiment tracker |
+| `evaluate` | `(model: Model, X_test: DataFrame, y_test: Series) → Metrics` | Score on held-out data, return metrics dict |
+
+### Invariants
+
+- `raw_data` is never mutated after `ingest` completes
+- `processed_data` train/test split is determined once and reused across all actions
+- All actions within an experiment share the same `experiment_id`
+- `metrics` keys are consistent across runs for the same model type
+- Feature names in `feature_set` must all exist as columns in the processed DataFrame
 
 ---
 
 ## Architecture
 
-### Workflow Overview
-
 ```
 Raw Data
     ↓
-┌────────────────────────────────────────────────┐
-│ 1. Data Ingestion & Validation                 │
-│    • Load from sources (CSV, database, API)    │
-│    • Schema & data quality validation          │
-│    • See: Testing Strategy > Data Validation   │
-└────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ ingest(source, schema)              │
+│   • Load from source                │
+│   • Validate schema & types         │
+└─────────────────────────────────────┘
     ↓
-┌────────────────────────────────────────────────┐
-│ 2. Preprocessing                               │
-│    • Handle missing values                     │
-│    • Normalize/standardize                     │
-│    • Train/test split                          │
-└────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ preprocess(df, config)              │
+│   • Handle missing values           │
+│   • Normalize / standardize         │
+│   • Train/test split                │
+└─────────────────────────────────────┘
     ↓
-┌────────────────────────────────────────────────┐
-│ 3. Feature Engineering                         │
-│    • Create derived features                   │
-│    • Feature selection                         │
-│    • Encoding categorical variables            │
-└────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ engineer_features(df, feature_list) │
+│   • Create derived features         │
+│   • Encode categoricals             │
+└─────────────────────────────────────┘
     ↓
-┌────────────────────────────────────────────────┐
-│ 4. Model Training                              │
-│    • Initialize model                          │
-│    • Train with hyperparameters                │
-│    • Log metrics and artifacts                 │
-└────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ train(X, y, config)                 │
+│   • Fit model                       │
+│   • Log params + artifacts          │
+└─────────────────────────────────────┘
     ↓
-┌────────────────────────────────────────────────┐
-│ 5. Evaluation                                  │
-│    • Test set performance                      │
-│    • Generate evaluation reports               │
-│    • Compare with baseline                     │
-└────────────────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│ evaluate(model, X_test, y_test)     │
+│   • Score on held-out data          │
+│   • Log metrics                     │
+└─────────────────────────────────────┘
     ↓
 Trained Model + Metrics
 ```
 
 ---
 
-## Design Patterns
-
-### 1. Configuration-Driven Pipelines
-
-**Why**: Separate code from configuration for reproducibility and easy experimentation.
-
-**Example**:
-```yaml
-# config/experiment.yaml
-data:
-  source: "data/raw/dataset.csv"
-  test_split: 0.2
-
-preprocessing:
-  handle_missing: "mean"
-  normalize: true
-
-features:
-  - feature_1
-  - feature_2
-  - derived_ratio
-
-model:
-  type: "random_forest"
-  hyperparameters:
-    n_estimators: 100
-    max_depth: 10
-```
-
-**Benefits**: Version control experiments, easy parameter sweeps, reproducible results.
-
-### 2. Experiment Tracking
-
-**Why**: Track experiments, compare results, and ensure reproducibility.
-
-**Tools**: MLflow, ZenML, or custom logging
-
-**Example workflow**:
-```python
-# Using MLflow for experiment tracking
-import mlflow
-
-with mlflow.start_run(run_name="rf_experiment_1"):
-    # Log parameters
-    mlflow.log_param("n_estimators", 100)
-    mlflow.log_param("max_depth", 10)
-
-    # Train model
-    model = train_model(X_train, y_train)
-
-    # Log metrics
-    mlflow.log_metric("accuracy", accuracy)
-    mlflow.log_metric("f1_score", f1)
-
-    # Log model
-    mlflow.sklearn.log_model(model, "model")
-```
-
-### 3. Data Versioning
-
-**Why**: Track data changes alongside code for full reproducibility.
-
-**Pattern**: Store data hashes or version identifiers with each experiment
-
-**Example**:
-```python
-import pandas as pd
-import hashlib
-
-# Load and version data
-df = pd.read_csv("data/dataset.csv")
-data_hash = hashlib.md5(pd.util.hash_pandas_object(df).values).hexdigest()
-
-# Log with experiment
-mlflow.log_param("data_version", data_hash[:8])
-```
-
----
-
 ## Common Tasks
 
-### Adding a New Data Source
+### Running a new experiment
 
-1. **Create data loader** in `data/loaders/[source_name].py`
-2. **Add to configuration** in `config/data_sources.yaml`
-3. **Write data validation** to check schema and types
-4. **Update documentation** if pipeline architecture changes
+1. Create config in `config/experiments/[name].yaml`
+2. Run: `python train.py --config config/experiments/[name].yaml`
+3. Review results in MLflow UI: `mlflow ui`
 
-### Adding a New Feature
+### Adding a new feature
 
-1. **Define transformation** in `features/transformers.py`
-2. **Add to feature list** in experiment configuration
-3. **Validate feature** on sample data
-4. **Run experiment** to evaluate impact on model performance
+1. Implement transformation in `features/transformers.py`
+2. Add feature name to experiment config under `features:`
+3. Validate on sample data before running full experiment
 
-### Running a New Experiment
+### Adding a new data source
 
-1. **Create experiment config** in `config/experiments/`
-2. **Run training**: `python train.py --config experiments/my_experiment.yaml`
-3. **Check results**: Review MLflow/ZenML UI for metrics
-4. **Compare with baseline**: Analyze metric improvements
-
-### Tracking and Comparing Experiments
-
-**Using MLflow**:
-```bash
-# View all experiments
-mlflow ui
-
-# Compare specific runs
-mlflow ui --backend-store-uri ./mlruns
-```
-
-**Key metrics to track**:
-- Model performance (accuracy, F1, AUC, etc.)
-- Training time
-- Hyperparameters used
-- Data version
+1. Create loader in `data/loaders/[source].py`
+2. Ensure it returns a DataFrame matching the expected schema
+3. Register in `config/data_sources.yaml`
 
 ---
 
-## Testing Strategy
+## Implementation Notes
 
-### Data Validation
+### [Pattern/Decision Name]
 
-**Purpose**: Ensure data quality before training
+**Issue**: [What problem does this solve?]
 
-**Tools**: pandas, great_expectations
+**Solution**: [Approach chosen and why]
 
-**Example**:
+**Location**: `[file:line]`
+
 ```python
-def validate_data(df):
-    # Check for required columns
-    assert all(col in df.columns for col in required_cols)
-
-    # Check data types
-    assert df['numeric_col'].dtype in [int, float]
-
-    # Check value ranges
-    assert df['age'].between(0, 120).all()
-```
-
-### Model Evaluation
-
-**Purpose**: Validate model performance on test set
-
-**Metrics**:
-- Classification: accuracy, precision, recall, F1, AUC-ROC
-- Regression: MSE, RMSE, MAE, R²
-
-**Example**:
-```python
-from sklearn.metrics import accuracy_score, f1_score
-
-y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred, average='weighted')
-
-print(f"Test Accuracy: {accuracy:.3f}")
-print(f"Test F1 Score: {f1:.3f}")
+# example
 ```
 
 ---
 
-## Additional Resources
+## Known Issues & Solutions
 
-### Internal Documentation
-- **[Root CLAUDE.md](../../CLAUDE.md)**: Project setup and overview
-- **[ROADMAP.md](../../ROADMAP.md)**: Strategic vision for ML development
-- **[PROJECT_PLAN.md](../../PROJECT_PLAN.md)**: Current sprint and experiments
-
-### External Resources
-- **pandas**: https://pandas.pydata.org/docs/
-- **scikit-learn**: https://scikit-learn.org/
-- **PyTorch**: https://pytorch.org/docs/
-- **MLflow**: https://mlflow.org/docs/
-- **ZenML**: https://docs.zenml.io/
+**[✅ RESOLVED | 🔄 IN PROGRESS | ⚠️ KNOWN LIMITATION]: [Title]**
+- **Issue**: [Description]
+- **Solution/Workaround**: [How it's handled]
+- **Location**: `[file:line]`
 
 ---
 
-**Last Updated**: [YYYY-MM-DD]
-**Status**: [e.g., "Active development", "Production ready"]
-**Maintainer**: [Name or team]
-
----
-
-**Related Documentation**:
-- [Root CLAUDE.md](../../CLAUDE.md) - Project overview and setup
-- [ROADMAP.md](../../ROADMAP.md) - Strategic vision
-- [PROJECT_PLAN.md](../../PROJECT_PLAN.md) - Current sprint work
+**Last Updated**: [YYYY-MM-DD] | **Status**: [Active / Production] | **Maintainer**: [Name]
