@@ -28,6 +28,7 @@
 │ Understand strategic vision      → ROADMAP.md                 │
 │ See current sprint/iteration     → PROJECT_PLAN.md            │
 │ Review recent changes            → CHANGELOG.md               │
+│ Cross-concept event flows        → SYNCHRONIZATIONS.md        │
 ├────────────────────────────────────────────────────────────────┤
 │ [Module/component name]          → [path/to/module/CLAUDE.md] │
 │ [Module/component name]          → [path/to/module/CLAUDE.md] │
@@ -84,7 +85,8 @@ LOG_LEVEL=info
 ├── CLAUDE.md                 # This file
 ├── ROADMAP.md
 ├── PROJECT_PLAN.md
-└── CHANGELOG.md
+├── CHANGELOG.md
+└── SYNCHRONIZATIONS.md       # Cross-concept event flows
 ```
 
 ---
@@ -137,4 +139,4 @@ Use this section to document non-obvious decisions and patterns as they emerge.
 
 **Last Updated**: [YYYY-MM-DD] | **Status**: [Active development / Production] | **Maintainers**: [Names]
 
-**Docs**: [ROADMAP.md](ROADMAP.md) · [PROJECT_PLAN.md](PROJECT_PLAN.md) · [CONTRIBUTING.md](CONTRIBUTING.md)
+**Docs**: [ROADMAP.md](ROADMAP.md) · [PROJECT_PLAN.md](PROJECT_PLAN.md) · [SYNCHRONIZATIONS.md](SYNCHRONIZATIONS.md) · [CONTRIBUTING.md](CONTRIBUTING.md)

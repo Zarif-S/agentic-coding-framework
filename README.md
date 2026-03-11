@@ -49,6 +49,7 @@ your-project/
 ├── ROADMAP.md                   # Strategic vision (quarters/years)
 ├── PROJECT_PLAN.md              # Tactical execution (weeks/months)
 ├── CHANGELOG.md                 # Feature and change history
+├── SYNCHRONIZATIONS.md          # Cross-concept event flows
 ├── CONTRIBUTING.md              # Contributor guidelines
 │
 └── src/
@@ -75,6 +76,7 @@ your-project/
 | **PROJECT_PLAN.md** | Weeks/Months | Tactical execution - the "route" | "Sprint 3: Implement OAuth middleware" |
 | **CLAUDE.md** (root) | Always current | Navigation hub + setup | Task routing, env setup, common commands |
 | **CLAUDE.md** (subfolder) | Always current | Architecture + patterns | Component design, integration guides |
+| **SYNCHRONIZATIONS.md** | Always current | Cross-concept event flows | "When user.delete fires → post.deleteAll follows" |
 | **CHANGELOG.md** | Historical | Feature history | "v2.1.0: Added rate limiting" |
 
 ---
@@ -92,6 +94,7 @@ cp agentic-coding-framework/CLAUDE.md your-project/
 cp agentic-coding-framework/ROADMAP.md your-project/
 cp agentic-coding-framework/PROJECT_PLAN.md your-project/
 cp agentic-coding-framework/CHANGELOG.md your-project/
+cp agentic-coding-framework/SYNCHRONIZATIONS.md your-project/
 
 # Copy example subfolder CLAUDE.md
 cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
