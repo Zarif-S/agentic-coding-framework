@@ -83,6 +83,8 @@ your-project/
 
 ## Quick Start
 
+> **New here?** See [GETTING_STARTED.md](GETTING_STARTED.md) for a step-by-step walkthrough including the skills workflow and a DS/ML project example.
+
 ### 1. Copy Template Files to Your Project
 
 ```bash
