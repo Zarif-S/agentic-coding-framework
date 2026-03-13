@@ -107,7 +107,27 @@ cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your
 3. **Edit `PROJECT_PLAN.md`**: Add current sprint/iteration plans
 4. **Edit `CHANGELOG.md`**: Document your first version
 
-### 3. Start Using with AI Agents
+### 3. Copy the Claude Skills (optional)
+
+If you use Claude Code, copy the included skills into your project:
+
+```bash
+cp -r agentic-coding-framework/.claude your-project/
+```
+
+This gives you five `/commands` that automate the most common framework tasks:
+
+| Skill | What it does |
+|-------|-------------|
+| `/concept-spec` | Guided wizard to generate a new concept `CLAUDE.md` |
+| `/plan-feature` | Plans a feature and triages which docs need updating |
+| `/sync-flow` | Adds a new SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
+| `/changelog-gen` | Parses recent commits and drafts `CHANGELOG.md` entries |
+| `/doc-health` | Scans all docs for broken links, stale dates, missing sections |
+
+See [`.claude/skills/`](.claude/skills/) for the full skill definitions.
+
+### 4. Start Using with AI Agents
 
 When working with Claude Code or other AI assistants:
 - Point them to `CLAUDE.md` as the main entry point
@@ -328,17 +348,19 @@ This framework is designed to evolve. Potential enhancements being considered:
 
 **Value**: Reduces token usage and improves AI agent performance by providing only relevant context when needed
 
-### 5. Claude Skills Integration
+### 5. Claude Skills Integration ✅
 
-**Concept**: Develop custom Claude skills that understand and leverage this documentation framework
+**Shipped**: Five Claude Code skills are included in `.claude/skills/` and ready to copy into any project:
 
-**Potential Skills**:
-- `/docs-search` - Intelligent search across hierarchical documentation
-- `/update-roadmap` - Guided roadmap updates with validation
-- `/plan-feature` - Feature planning that auto-generates PROJECT_PLAN entries
-- `/sync-docs` - Detect and fix documentation inconsistencies
+| Skill | Purpose |
+|-------|---------|
+| `/concept-spec` | Generate a new concept `CLAUDE.md` with state/actions/invariants |
+| `/plan-feature` | Plan a feature and triage doc updates across the hierarchy |
+| `/sync-flow` | Add a SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
+| `/changelog-gen` | Draft `[Unreleased]` changelog entries from recent commits |
+| `/doc-health` | Audit all docs for broken links, stale dates, missing sections |
 
-**Value**: Seamless workflow for maintaining and using the documentation framework within Claude Code
+**Value**: Each skill enforces framework conventions automatically — concepts stay isolated, sync entries stay in SYNCHRONIZATIONS.md, and changelog entries get human-readable descriptions instead of raw commit messages.
 
 ### 6. Framework Plugin/Extension
 
@@ -368,6 +390,6 @@ Meng, E. and Jackson, D. (2025). *What You See Is What It Does: A Structural Pat
 
 ---
 
-**Last Updated**: 2025-01-31
-**Status**: Template v1.0 - Ready for use
+**Last Updated**: 2026-03-13
+**Status**: Template v1.1 - Ready for use
 **Feedback**: [GitHub Issues](https://github.com/your-username/agentic-coding-framework/issues)
