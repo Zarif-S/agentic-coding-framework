@@ -32,6 +32,9 @@
 ├────────────────────────────────────────────────────────────────┤
 │ [Module/component name]          → [path/to/module/CLAUDE.md] │
 │ [Module/component name]          → [path/to/module/CLAUDE.md] │
+├────────────────────────────────────────────────────────────────┤
+│ All logged decisions (ADR)       → DECISIONS.md               │
+│ Process & technical lessons      → LESSONS_LEARNED.md         │
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -86,6 +89,8 @@ LOG_LEVEL=info
 ├── ROADMAP.md
 ├── PROJECT_PLAN.md
 ├── CHANGELOG.md
+├── DECISIONS.md              # Architectural decision records (ADR)
+├── LESSONS_LEARNED.md        # Post-project process & technical lessons
 └── SYNCHRONIZATIONS.md       # Cross-concept event flows
 ```
 
