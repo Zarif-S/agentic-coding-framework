@@ -32,7 +32,7 @@ Add a new synchronization entry to `SYNCHRONIZATIONS.md` using the standard SYNC
 7. **Confirm** — Tell the user:
    - The SYNC ID assigned (e.g. SYNC-004)
    - The file updated
-   - Which concept CLAUDE.md files should cross-reference this entry (suggest adding a note like "See [SYNC-004](../SYNCHRONIZATIONS.md#sync-004)" under the relevant action in each concept's Implementation Notes)
+   - Which concept CLAUDE.md files should cross-reference this entry (suggest adding a note like `See [SYNC-004](<path to SYNCHRONIZATIONS.md>#sync-004)` under the relevant action in each concept's CLAUDE.md, with the path relative to that file, e.g. `../../SYNCHRONIZATIONS.md` from `src/your-module/CLAUDE.md`)
 
 ---
 

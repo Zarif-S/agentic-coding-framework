@@ -101,9 +101,12 @@ git clone https://github.com/Zarif-S/agentic-coding-framework.git
 # Copy the core templates to your project (everything in templates/, including .env.example)
 cp -r agentic-coding-framework/templates/. your-project/
 
-# Copy example subfolder CLAUDE.md
+# Optional: start a concept from the example (or generate one with /concept-spec instead)
+mkdir -p your-project/src/your-module
 cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
 ```
+
+If you copy the example, change its `../SYNCHRONIZATIONS.md` link to `../../SYNCHRONIZATIONS.md`: in the framework repo it points to `examples/SYNCHRONIZATIONS.md`, but in your project the file sits two levels up, at the root.
 
 ### 2. Customize for Your Project
 

@@ -40,7 +40,7 @@ A documentation template that people copy into a new project so their coding age
 
 1. Relative Markdown links resolve (ignoring links inside code spans and fences, and the deliberate `(link)` placeholders in `templates/PROJECT_PLAN.md`).
 2. `grep -rn "your-username\|20[0-9][0-9]-" templates` finds nothing (real-looking dates or placeholder URLs leaking into templates). Dates inside `.claude/commands/` format examples are fine.
-3. If you changed copy instructions or `templates/`: copy into a scratch folder exactly as `GETTING_STARTED.md` says, and check every file arrives.
+3. If you changed copy instructions, `templates/`, `examples/` or `.claude/commands/`: in an empty scratch folder (create nothing by hand), run the copy commands exactly as `README.md` and `GETTING_STARTED.md` give them. Every command succeeds, and the link check from step 1 passes on the copied project, not just this repo.
 4. If you changed a code snippet in `docs/ADVANCED_FEATURES.md`: run it.
 5. Say explicitly what you did not verify (for commands, usually: not run in a real Claude Code session).
 
