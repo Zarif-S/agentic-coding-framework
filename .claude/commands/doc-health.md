@@ -23,7 +23,7 @@ Scan all documentation files in the project for structural issues (broken links,
 
 **[CRITICAL] Broken relative link**
 - Parse all `[text](path)` links that point to local files (skip `http(s)://` and pure `#anchor` links)
-- Skip links inside fenced code blocks and HTML comments
+- Skip links inside fenced code blocks, inline code spans (`` `...` ``) and HTML comments
 - Resolve each path relative to the file's location
 - Flag any that point to a file that doesn't exist
 

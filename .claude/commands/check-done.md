@@ -6,7 +6,11 @@ Check the current changes against the project's Conventions and Definition of Do
 
 1. **Load the rules** — Read the root `CLAUDE.md` and extract every rule under `## Conventions` and every step under `## Definition of Done`. If either section is missing, say so and stop; there's nothing to check against.
 
-2. **Get the changes** — Run `git status` and `git diff HEAD` to see staged, unstaged, and untracked changes. If there are none, check the most recent commit (`git show HEAD`) and say that's what you're checking.
+2. **Get the changes** — Run `git status --porcelain` to list changed and untracked files. Then:
+   - If the repo has commits (`git rev-parse --verify HEAD` succeeds), run `git diff HEAD` for changes to tracked files.
+   - If it has no commits yet, `git diff HEAD` fails; run `git diff --cached` for staged files instead.
+   - Untracked files never appear in `git diff`; read each one in full.
+   - If nothing has changed, check the most recent commit (`git show HEAD`) and say that's what you're checking. If there are no commits and no changes, say there is nothing to check and stop.
 
 3. **Check each convention against the diff** — Go through the rules one at a time, not as a general impression. For each, decide: `met`, `violated`, or `not applicable`. Common things to look for:
    - Numeric literals or hardcoded paths added to notebook cells (`.ipynb`) or to function defaults where Conventions say they belong in config
