@@ -783,5 +783,5 @@ While this framework starts documentation-only, teams may eventually want automa
 
 **Related Documentation**:
 - [README.md](../README.md) - Framework overview
-- [CLAUDE.md](../CLAUDE.md) - Core template
+- [templates/CLAUDE.md](../templates/CLAUDE.md) - Core template
 - [CONTRIBUTING.md](../CONTRIBUTING.md#documentation-practices) - Debt tracking implementation

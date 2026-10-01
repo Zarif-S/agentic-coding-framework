@@ -14,14 +14,9 @@ git clone https://github.com/Zarif-S/agentic-coding-framework.git
 mkdir my-project && cd my-project
 git init
 
-# Copy the core templates
-cp ../agentic-coding-framework/CLAUDE.md .
-cp ../agentic-coding-framework/ROADMAP.md .
-cp ../agentic-coding-framework/PROJECT_PLAN.md .
-cp ../agentic-coding-framework/CHANGELOG.md .
-cp ../agentic-coding-framework/SYNCHRONIZATIONS.md .
-cp ../agentic-coding-framework/DECISIONS.md .
-cp ../agentic-coding-framework/LESSONS_LEARNED.md .
+# Copy the core templates (CLAUDE.md, ROADMAP.md, PROJECT_PLAN.md, CHANGELOG.md,
+# SYNCHRONIZATIONS.md, DECISIONS.md, LESSONS_LEARNED.md, .env.example)
+cp -r ../agentic-coding-framework/templates/. .
 
 # Copy the Claude skills
 cp -r ../agentic-coding-framework/.claude .
@@ -48,6 +43,44 @@ Before writing any code, spend 15 minutes on these two files:
 **`ROADMAP.md`** — write one paragraph describing what you're building and why. Add your first goal. This takes 5 minutes and saves significant context-rebuilding later.
 
 Leave `PROJECT_PLAN.md`, `CHANGELOG.md`, `DECISIONS.md`, `LESSONS_LEARNED.md`, and `SYNCHRONIZATIONS.md` as-is for now. They fill in as you work.
+
+### Conventions examples by project type
+
+The template's Conventions are written for a data-science project. Pick the block closest to yours as a starting point, then rewrite it in your project's terms: real paths, real commands, the mistakes you've actually seen.
+
+**RAG / LLM application**
+
+```markdown
+**Prompts & model settings**
+- Prompts live in `prompts/*.md` and are loaded by name. No prompt text inline in code.
+- Model name, temperature, max tokens, chunk size, chunk overlap and top-k live in `config/*.yaml`. No literals at call sites.
+- All model calls go through `[src/app]/llm.py`, which logs the prompt name, model, token counts and latency.
+
+**Evaluation**
+- Any change to a prompt, the retriever, chunking or the model runs `[make eval]` and reports the score next to the last baseline in `evals/results.md`.
+- Eval sets in `evals/` are versioned data. Never edit a case to make it pass; add a new case and say why.
+- A retrieval answer cites the source chunk IDs it used.
+
+**Secrets**
+- API keys come from environment variables (`.env`, never committed). Never print or log them.
+```
+
+**Web app / API**
+
+```markdown
+**API**
+- Request and response bodies are validated by schemas in `[src/app]/schemas/`. Handlers never read raw JSON.
+- Errors return `{"error": {"code", "message"}}` with the right HTTP status. No stack traces in responses.
+- Every new endpoint has a test that calls it over HTTP, including one failure case.
+
+**Data**
+- Database access goes through `[src/app]/repositories/`. No queries in handlers or templates.
+- Schema changes are new migrations. Never edit a migration that has been applied anywhere.
+
+**Frontend**
+- Colours, spacing and type sizes come from design tokens in `[src/ui]/tokens`. No hex values or pixel sizes in components.
+- Every interactive element is reachable by keyboard and has an accessible name.
+```
 
 ---
 

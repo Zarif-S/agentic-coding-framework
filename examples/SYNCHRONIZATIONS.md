@@ -77,4 +77,4 @@ Use `[SYNC-NNN]` IDs for stable references in code reviews and cross-linking.
 
 **Concepts**: [ml-workflow/CLAUDE.md](ml-workflow/CLAUDE.md) · [deployment/CLAUDE.md](deployment/CLAUDE.md)
 
-**Related**: [Root CLAUDE.md](../CLAUDE.md) · [ROADMAP.md](../ROADMAP.md)
+**Related**: [Template CLAUDE.md](../templates/CLAUDE.md) · [Template ROADMAP.md](../templates/ROADMAP.md)

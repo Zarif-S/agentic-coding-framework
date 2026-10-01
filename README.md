@@ -98,14 +98,8 @@ your-project/
 # Clone this template
 git clone https://github.com/Zarif-S/agentic-coding-framework.git
 
-# Copy core files to your project
-cp agentic-coding-framework/CLAUDE.md your-project/
-cp agentic-coding-framework/ROADMAP.md your-project/
-cp agentic-coding-framework/PROJECT_PLAN.md your-project/
-cp agentic-coding-framework/CHANGELOG.md your-project/
-cp agentic-coding-framework/SYNCHRONIZATIONS.md your-project/
-cp agentic-coding-framework/DECISIONS.md your-project/
-cp agentic-coding-framework/LESSONS_LEARNED.md your-project/
+# Copy the core templates to your project (everything in templates/, including .env.example)
+cp -r agentic-coding-framework/templates/. your-project/
 
 # Copy example subfolder CLAUDE.md
 cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
