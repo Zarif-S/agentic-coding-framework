@@ -8,7 +8,7 @@ This guide walks you from zero to a working project structure in about 20 minute
 
 ```bash
 # Clone the framework
-git clone https://github.com/your-username/agentic-coding-framework.git
+git clone https://github.com/Zarif-S/agentic-coding-framework.git
 
 # Create your project
 mkdir my-project && cd my-project
@@ -20,6 +20,8 @@ cp ../agentic-coding-framework/ROADMAP.md .
 cp ../agentic-coding-framework/PROJECT_PLAN.md .
 cp ../agentic-coding-framework/CHANGELOG.md .
 cp ../agentic-coding-framework/SYNCHRONIZATIONS.md .
+cp ../agentic-coding-framework/DECISIONS.md .
+cp ../agentic-coding-framework/LESSONS_LEARNED.md .
 
 # Copy the Claude skills
 cp -r ../agentic-coding-framework/.claude .
@@ -35,13 +37,17 @@ claude .
 
 ## 2. Fill in the root docs
 
-Before writing any code, spend 10 minutes on these two files:
+Before writing any code, spend 15 minutes on these two files:
 
-**`CLAUDE.md`** — replace the placeholders with your project name, tech stack, and how to run it. The navigation table at the top is what Claude reads first on every session — keep it accurate.
+**`CLAUDE.md`** — Claude loads this into every session, so leftover placeholders are noise it reads every time. Fill in:
+- Project name, one-line description, and stack
+- Setup, test, and lint commands
+- **Conventions**: the rules you'd otherwise find yourself repeating. Where do parameters live? What does a finished plot (or prompt, or endpoint) look like? Replace the examples with your own; specific beats general.
+- Delete any section you have nothing for yet rather than leaving placeholders.
 
-**`ROADMAP.md`** — write one paragraph describing what you're building and why. Add your first quarterly goal. This takes 5 minutes and saves significant context-rebuilding later.
+**`ROADMAP.md`** — write one paragraph describing what you're building and why. Add your first goal. This takes 5 minutes and saves significant context-rebuilding later.
 
-Leave `PROJECT_PLAN.md`, `CHANGELOG.md`, and `SYNCHRONIZATIONS.md` as-is for now — they'll fill in naturally as you work.
+Leave `PROJECT_PLAN.md`, `CHANGELOG.md`, `DECISIONS.md`, `LESSONS_LEARNED.md`, and `SYNCHRONIZATIONS.md` as-is for now. They fill in as you work.
 
 ---
 
@@ -92,7 +98,7 @@ Describe the first thing you want to build. The skill will:
 
 ## 6. Implement
 
-Now hand off to Claude with tight, concept-scoped prompts:
+For anything non-trivial, start in plan mode (Shift+Tab) or ask Claude to state its assumptions first. Then hand off with tight, concept-scoped prompts:
 
 > "Implement the `[Concept]` concept. Follow the spec in `[path]/CLAUDE.md` exactly. Do not import from any other concept. Write tests that verify the invariants."
 
@@ -100,12 +106,17 @@ Repeat for each concept independently. Once all concepts are implemented and tes
 
 > "Read `SYNCHRONIZATIONS.md`. Create `coordinator.py` with one function per SYNC entry. This is the only file allowed to import from multiple concepts."
 
+Before calling each task done, run `/check-done`. When you and Claude choose between alternatives along the way, run `/decision` straight away.
+
 ---
 
 ## 7. Ongoing maintenance
 
 | When | Run |
 |------|-----|
+| Chose between alternatives | `/decision` |
+| Before calling a task done | `/check-done` |
+| Agent made the same mistake twice | Add to `LESSONS_LEARNED.md` and a rule to CLAUDE.md Conventions |
 | Before a release or at end of sprint | `/changelog-gen` |
 | Something feels out of sync across docs | `/doc-health` |
 | Adding a new module | `/concept-spec` |
@@ -140,7 +151,7 @@ See `examples/` for a worked version of exactly this structure.
 ## What good looks like
 
 After the first session you should have:
-- [ ] Root `CLAUDE.md` with your project name, stack, and navigation table filled in
+- [ ] Root `CLAUDE.md` with your project name, stack, commands, and Conventions filled in, and no placeholders left
 - [ ] `ROADMAP.md` with at least one quarterly goal
 - [ ] At least one concept `CLAUDE.md` with state/actions/invariants
 - [ ] `PROJECT_PLAN.md` with your first feature in the Now section

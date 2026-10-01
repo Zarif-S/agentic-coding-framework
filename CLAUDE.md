@@ -1,147 +1,92 @@
-# Claude Code Configuration - [Your Project Name]
+# [Your Project Name]
 
-## Project Overview
+[One or two sentences: what this project does and who it's for.]
 
-**[Your Project Name]** is [brief 1-2 sentence description of what your project does].
-
-### Key Technologies
-- [Language/Runtime]: [e.g., Python 3.11, Node.js 18]
-- [Database/Storage]: [e.g., PostgreSQL, S3]
-- [Key Dependencies]: [e.g., FastAPI, React, PyTorch]
-
-### Current Status
-✅ [Completed milestone]
-🔄 [In-progress milestone]
-⏳ [Planned milestone]
+**Stack**: [e.g., Python 3.12, pandas, PyTorch, MLflow]
 
 ---
 
-## Documentation Navigation
+## Key Docs
 
-**What are you trying to do?**
+- [PROJECT_PLAN.md](PROJECT_PLAN.md): what we're doing now. Read before starting a feature.
+- [DECISIONS.md](DECISIONS.md): why we chose X over Y (ADRs).
+- [LESSONS_LEARNED.md](LESSONS_LEARNED.md): what went wrong and what we do differently now.
+- [SYNCHRONIZATIONS.md](SYNCHRONIZATIONS.md): cross-concept event flows.
+- [ROADMAP.md](ROADMAP.md): longer-term goals.
+- [CHANGELOG.md](CHANGELOG.md): what changed, per release.
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│ TASK                              → READ THIS FIRST            │
-├────────────────────────────────────────────────────────────────┤
-│ Setup project & install deps     → This file (below)          │
-│ Understand strategic vision      → ROADMAP.md                 │
-│ See current sprint/iteration     → PROJECT_PLAN.md            │
-│ Review recent changes            → CHANGELOG.md               │
-│ Cross-concept event flows        → SYNCHRONIZATIONS.md        │
-├────────────────────────────────────────────────────────────────┤
-│ [Module/component name]          → [path/to/module/CLAUDE.md] │
-│ [Module/component name]          → [path/to/module/CLAUDE.md] │
-├────────────────────────────────────────────────────────────────┤
-│ All logged decisions (ADR)       → DECISIONS.md               │
-│ Process & technical lessons      → LESSONS_LEARNED.md         │
-└────────────────────────────────────────────────────────────────┘
-```
+**Concepts**:
+- [Concept name]: `[path/to/concept/CLAUDE.md]`
 
-**For AI agents**: Read this file first, then follow the navigation table above to find module-specific context. Check [PROJECT_PLAN.md](PROJECT_PLAN.md) for current priorities before implementing features.
+**Where things get written down**:
+- **Choosing between alternatives** → append an ADR to DECISIONS.md (`/decision`). Don't record decisions anywhere else; other docs link to the ADR.
+- **Something went wrong that shouldn't happen again** → add to LESSONS_LEARNED.md. If it's about how you (the agent) should work, also add a rule to Conventions below.
 
 ---
 
-## Environment Setup
+## Setup & Commands
 
 ```bash
-# Clone and install
-git clone [repository-url]
-cd [project-name]
-[pip install -r requirements.txt | npm install | ...]
+[pip install -e ".[dev]" | uv sync | ...]
+cp .env.example .env   # then fill in values
 
-# Environment variables
-cp .env.example .env
-# Fill in required variables (see below)
-
-# [Any one-time setup steps]
-[e.g., createdb myapp_dev && python manage.py migrate]
-```
-
-### Environment Variables
-
-```bash
-# Required
-API_KEY=
-DATABASE_URL=
-[OTHER_REQUIRED_VAR]=
-
-# Optional
-DEBUG=false
-LOG_LEVEL=info
+[test command]         # e.g. pytest
+[lint command]         # e.g. ruff check .
+[run command]          # e.g. python -m mypkg.train --config config/baseline.yaml
 ```
 
 ---
 
-## Project Structure
+## How to Work
 
-```
-[project-name]/
-├── [src/app/lib]/            # [Core logic]
-│   ├── [module]/
-│   │   └── CLAUDE.md         # Module-specific architecture guide
-│   └── [module]/
-├── tests/
-├── scripts/                  # Automation and utilities
-├── docs/
-├── .env.example
-├── CLAUDE.md                 # This file
-├── ROADMAP.md
-├── PROJECT_PLAN.md
-├── CHANGELOG.md
-├── DECISIONS.md              # Architectural decision records (ADR)
-├── LESSONS_LEARNED.md        # Post-project process & technical lessons
-└── SYNCHRONIZATIONS.md       # Cross-concept event flows
-```
+- For anything beyond a small fix, **state your plan and assumptions before editing**: which files you'll touch, where new parameters will live, what you'll verify. Wait for a go-ahead if anything is ambiguous.
+- Prefer asking over guessing when a convention below doesn't cover the case.
+- Keep changes scoped to the task. Mention unrelated problems you notice; don't fix them unasked.
 
 ---
 
-## Common Tasks
+## Conventions
 
-### [Primary workflow - e.g., "Running the app"]
+Replace these examples with your project's rules. Write them as specific, checkable statements; vague rules ("write clean code") don't change behaviour.
 
-```bash
-[dev command]     # Development mode → http://localhost:[port]
-[test command]    # Run test suite
-[build command]   # Production build
-```
+**Parameters & config**
+- Tunable values (hyperparameters, thresholds, paths, seeds) live in `config/*.yaml`, loaded into dataclasses in `[src/mypkg]/config.py`.
+- Functions take these values as explicit arguments, with no defaults for experiment parameters.
+- Notebooks load a config and call functions. No numeric literals or hardcoded paths in notebook cells.
+- Adding a parameter means updating the dataclass and the YAML in the same change.
 
-### [Secondary workflow - e.g., "Adding a new feature"]
+**Plots**
+- Create and save figures with `save_figure()` from `[src/mypkg]/plotting.py`. Don't call `plt.savefig()` / `plt.show()` directly.
+- Every figure has a title and axis labels (with units). Any axes with more than one series has a legend.
 
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+**Code**
+- Type hints on public functions. Docstrings state units and array shapes where relevant.
+- New functions get a test in `tests/`.
 
----
-
-## Important Implementation Notes
-
-Use this section to document non-obvious decisions and patterns as they emerge.
-
-### [Pattern/Decision Name]
-
-**Issue**: [What problem does this solve?]
-
-**Solution**: [What approach was chosen and why?]
-
-**Location**: `[file:line_number]`
-
-**Example**:
-```[language]
-// example code snippet
-```
+Where you can, enforce a convention in code rather than prose: a figure helper that refuses to save an unlabelled plot, a config model that fails on a missing parameter. See "Enforcing Conventions in Code" in the framework's `docs/ADVANCED_FEATURES.md` for example snippets.
 
 ---
 
-## Known Issues & Solutions
+## Definition of Done
 
-**[✅ RESOLVED | 🔄 IN PROGRESS | ⚠️ KNOWN LIMITATION]: [Title]**
-- **Issue**: [Description]
-- **Solution/Workaround**: [How it's handled]
-- **Location**: `[file:line]`
+Before reporting a task as finished:
+
+1. Run the tests and linter; they pass.
+2. Re-read your diff against each rule in **Conventions**. List any rule you didn't meet and why.
+3. For every figure you created or changed: open the saved image and check it visually.
+4. If you chose between alternatives, an ADR exists in DECISIONS.md.
+5. Say explicitly what you did **not** verify.
+
+Run `/check-done` to have this checked against the current diff.
 
 ---
 
-**Last Updated**: [YYYY-MM-DD] | **Status**: [Active development / Production] | **Maintainers**: [Names]
+## Gotchas
 
-**Docs**: [ROADMAP.md](ROADMAP.md) · [PROJECT_PLAN.md](PROJECT_PLAN.md) · [SYNCHRONIZATIONS.md](SYNCHRONIZATIONS.md) · [CONTRIBUTING.md](CONTRIBUTING.md)
+Non-obvious things that will trip you up. (Decisions go in DECISIONS.md, not here.)
+
+- **[Short title]**: [What happens and what to do instead.] (`[file:line]`)
+
+---
+
+**Last Updated**: [YYYY-MM-DD]

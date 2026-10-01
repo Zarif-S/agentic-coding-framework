@@ -7,14 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 📍 Breadcrumbs
-
-- **Looking for strategic vision?** → [ROADMAP.md](ROADMAP.md)
-- **Looking for current sprint work?** → [PROJECT_PLAN.md](PROJECT_PLAN.md)
-- **Looking for implementation details?** → [CLAUDE.md](CLAUDE.md)
-
----
-
 ## [Unreleased]
 
 ### Added
@@ -37,53 +29,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0] - 2025-01-31
+<!--
+  EXAMPLE of a released version. Not real project history; delete once you
+  have your first release.
+
+## [0.2.0] - YYYY-MM-DD
 
 ### Added
-- Initial release with core ML pipeline
-- Baseline XGBoost model achieving 0.85 F1 score on test set
-- Feature engineering pipeline with 47 derived features
-- MLflow experiment tracking integration
-- Data validation framework using Great Expectations
-- Documentation framework:
-  - Root CLAUDE.md for project overview
-  - ROADMAP.md for strategic planning
-  - PROJECT_PLAN.md for tactical execution
+- Model serving API with FastAPI
 
 ### Changed
-- N/A (initial release)
+- Feature pipeline now handles missing values explicitly instead of dropping rows
 
 ### Fixed
-- N/A (initial release)
-
----
-
-## [0.2.0] - 2025-01-15
-
-### Added
-- Model serving API with FastAPI and ONNX Runtime
-- Automated data quality monitoring dashboard
-
-### Changed
-- Updated feature engineering pipeline to handle missing values more robustly
-- Improved model training logging with detailed hyperparameter tracking
-
-### Fixed
-- Fixed memory leak in data preprocessing pipeline for large datasets
-- Corrected feature scaling in production inference pipeline
+- Corrected feature scaling in the inference pipeline
 
 ### Deprecated
-- Legacy CSV-based data loading (use Parquet format)
-
----
-
-## [0.1.0] - 2025-01-01
-
-### Added
-- Initial project setup
-- Basic data pipeline structure
-- Exploratory data analysis notebooks
-- Initial model training framework
+- CSV-based data loading (use Parquet)
+-->
 
 ---
 
@@ -151,5 +114,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-**Last Updated**: 2025-01-31
-**Current Version**: 1.0.0
+**Last Updated**: [YYYY-MM-DD]
+**Current Version**: [X.Y.Z]

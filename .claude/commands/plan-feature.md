@@ -9,12 +9,14 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    - Which concept(s) does it touch or introduce?
    - Is this new functionality, a change to existing behavior, or a fix?
    - Does it have any known dependencies or blockers?
+   - Did planning it involve choosing between alternatives (approach, library, data format, where something lives)? If so, what were the options?
 
 2. **Read project state** — Before generating anything, read:
    - `PROJECT_PLAN.md` — understand current focus, active Now/Next/Later items, and active blockers
    - `SYNCHRONIZATIONS.md` — check whether the feature introduces new cross-concept flows
-   - Root `CLAUDE.md` — check which concept CLAUDE.md files exist (from the navigation table)
-   - `ROADMAP.md` — identify which strategic initiative or milestone this feature belongs to
+   - Root `CLAUDE.md`: check which concept CLAUDE.md files exist (from the `**Concepts**:` list)
+   - `ROADMAP.md`: identify which strategic initiative or milestone this feature belongs to
+   - `DECISIONS.md`: check whether an existing ADR already covers a choice this feature depends on, or whether the feature contradicts one
 
    If any of these files don't exist, note which ones are missing but continue with what's available.
 
@@ -31,6 +33,7 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    | `SYNCHRONIZATIONS.md` | needs update / no change | New cross-concept flow? |
    | `[concept]/CLAUDE.md` | needs update / no change | New state, actions, or invariants? |
    | `ROADMAP.md` | needs update / no change | New initiative or milestone? |
+   | `DECISIONS.md` | needs update / no change | Was a choice made between alternatives? Does it supersede an existing ADR? |
    | `CHANGELOG.md` | no change yet | Updated after implementation, not during planning |
    | `[new concept]/CLAUDE.md` | new file required | Feature introduces a new concept? |
 
@@ -41,7 +44,7 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    ```markdown
    **[N]. [Feature Name]**
    - **What**: [One sentence description of what this builds]
-   - **Why**: [The user-facing or technical reason it's needed]
+   - **Why**: [The user-facing or technical reason it's needed. If a choice was involved, link the ADR: "see ADR-NNN"]
    - **Who**: [Assignee or TBD]
    - **Status**: [Not started / In progress / Blocked]
    - **Depends on**: [Prerequisite features or decisions, if any]
@@ -54,6 +57,7 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    - If a concept CLAUDE.md needs new state/actions/invariants: add them in the correct tables. If the changes are substantial, suggest running `/concept-spec` instead to generate a fresh spec.
    - If SYNCHRONIZATIONS.md needs a new entry: suggest running `/sync-flow` to add it properly, rather than writing it manually here.
    - If ROADMAP.md needs an initiative update: add the feature under the current quarter's Key Initiatives or flag it as a new initiative if it doesn't fit any existing one.
+   - If DECISIONS.md needs an entry: write the ADR using the `/decision` format (next ADR number, options considered, decision, consequences), then link it from the PROJECT_PLAN.md entry's **Why** line. If the decision supersedes an existing ADR, update only that ADR's status line.
 
 7. **Confirm** — Output a short summary:
    - Files updated and what changed in each
@@ -66,6 +70,8 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
 
 - Never add a feature to Now if PROJECT_PLAN.md already has 3+ active Now items — flag this and ask the user if something should move to Next first
 - Never touch CHANGELOG.md during planning — it's updated after implementation, not before
+- Never write decision rationale into PROJECT_PLAN.md or ROADMAP.md; it goes in an ADR, and those docs link to it
+- If the feature contradicts an Accepted ADR, flag this before writing anything and ask whether the ADR should be superseded
 - If the feature description implies cross-concept coordination (two or more concept names appear, or the flow crosses a module boundary), always mark SYNCHRONIZATIONS.md as `needs update` and direct the user to `/sync-flow`
 - Do not invent tracking links — use "TBD" when none are provided
 - Keep the PROJECT_PLAN.md entry concise; this is a planning artifact, not a spec. The concept CLAUDE.md is the spec.

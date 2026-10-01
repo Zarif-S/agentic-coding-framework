@@ -57,6 +57,17 @@ Thank you for contributing! Please review this checklist to ensure documentation
 
 ---
 
+### Decisions & Lessons
+
+- [ ] **DECISIONS.md** - Did this PR involve choosing between alternatives? Add an ADR (`/decision`)
+- [ ] **LESSONS_LEARNED.md** - Did something go wrong that shouldn't happen again?
+- [ ] N/A - No decisions or lessons
+
+**If yes, which entries?**
+<!-- e.g., "ADR-007: Switch to Parquet", "LL-003: Agent hardcoded thresholds in notebook" -->
+
+---
+
 ### Code Documentation
 
 - [ ] **Code Comments** - Are there complex implementations that need inline documentation?
@@ -71,7 +82,7 @@ Thank you for contributing! Please review this checklist to ensure documentation
 
 If you didn't have time to update documentation fully:
 
-- [ ] I've added an entry to [PROJECT_PLAN.md - Documentation Debt](../PROJECT_PLAN.md#documentation-debt)
+- [ ] I've added an inline `TODO` or a GitHub issue labelled `documentation` (see [CONTRIBUTING.md](../../CONTRIBUTING.md#documentation-practices))
 
 **Debt item priority**: [ ] High [ ] Medium [ ] Low
 
@@ -99,11 +110,13 @@ If you didn't have time to update documentation fully:
 ## Quick Reference
 
 **What goes where?**
-- **ROADMAP.md**: Strategic vision, quarterly goals, major decisions
-- **PROJECT_PLAN.md**: Current sprint tasks, blockers, documentation debt
-- **Root CLAUDE.md**: Setup, structure, navigation, common tasks
+- **ROADMAP.md**: Strategic vision, quarterly goals
+- **PROJECT_PLAN.md**: Current focus, blockers
+- **DECISIONS.md**: Why we chose X over Y (ADRs)
+- **LESSONS_LEARNED.md**: What went wrong and what we do now
+- **Root CLAUDE.md**: Setup, commands, conventions, Definition of Done
 - **Subfolder CLAUDE.md**: Module architecture, design patterns, integration guides
 - **CHANGELOG.md**: User-facing features, breaking changes, bug fixes
 - **Code comments**: Complex implementation details, edge cases
 
-**See**: [docs/ADVANCED_FEATURES.md](../docs/ADVANCED_FEATURES.md#2-pr-documentation-checklist) for full guidance.
+**See**: [docs/ADVANCED_FEATURES.md](../../docs/ADVANCED_FEATURES.md#2-pr-documentation-checklist) for full guidance.

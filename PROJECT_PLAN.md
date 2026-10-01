@@ -1,17 +1,8 @@
 # Project Plan - Tactical Execution
 
-## 📍 Breadcrumbs
-
-- **New to the project?** → [CLAUDE.md](CLAUDE.md) for setup and overview
-- **Looking for strategic vision?** → [ROADMAP.md](ROADMAP.md)
-- **Looking for implementation details?** → [CLAUDE.md - Task Navigation](CLAUDE.md#-documentation-navigation)
-- **Looking for completed features?** → [CHANGELOG.md](CHANGELOG.md)
-
----
-
 ## Purpose of This Document
 
-**For AI Agents**: Understand current priorities and context before implementing features. You'll create your own task-level breakdown using TodoWrite.
+**For AI Agents**: Understand current priorities and context before implementing features. Break the work into your own task-level steps; don't add them here.
 
 **For Humans**: High-level status overview bridging ROADMAP strategy to execution tools (GitHub Issues, Jira, etc.).
 
@@ -33,7 +24,7 @@
 
 **Theme**: [What we're focused on - e.g., "Baseline Model Development" or "Multi-tenant Foundation"]
 
-**Strategic Alignment**: Supports [ROADMAP milestone - e.g., "Q1 2025: Establish ML pipeline foundation"]
+**Strategic Alignment**: Supports [ROADMAP milestone - e.g., "Q1: Establish ML pipeline foundation"]
 
 ---
 
@@ -43,7 +34,7 @@
 
 **1. [Initiative/Feature Name]**
 - **What**: [Brief description of what this is - e.g., "Data preprocessing pipeline with feature engineering"]
-- **Why**: [Business/technical reason - e.g., "Required for baseline model training"]
+- **Why**: [Business/technical reason - e.g., "Required for baseline model training". Link an ADR if a choice was involved: "see ADR-003"]
 - **Who**: [Team/Person/Agent - optional, e.g., "Data team" or "TBD"]
 - **Status**: [Phase or % - e.g., "70% complete - validation in progress"]
 - **Tracking**: [GitHub Issues #45-52](link) or [Jira Epic](link)
@@ -123,6 +114,7 @@
 - [ROADMAP.md](ROADMAP.md) - Strategic vision
 - [CLAUDE.md](CLAUDE.md) - Implementation guidance
 - [CHANGELOG.md](CHANGELOG.md) - Feature history
+- [DECISIONS.md](DECISIONS.md) - Decision records
 
 ---
 
@@ -132,9 +124,9 @@ When you're asked to implement a feature:
 
 1. **Read this document** to understand current focus and alignment
 2. **Check blockers** to avoid working on blocked items
-3. **Use TodoWrite** to create your own task-level breakdown
+3. **Break the work down** into your own task-level steps
 4. **Work incrementally** through your tasks, marking complete as you go
-5. **Update documentation** when your work is done (CHANGELOG, CLAUDE.md if architecture changed)
+5. **Update documentation** when your work is done (CHANGELOG, CLAUDE.md if architecture changed, DECISIONS.md if you chose between alternatives)
 
 Your task lists are ephemeral (conversation-level). This document stays high-level.
 
@@ -142,4 +134,4 @@ Your task lists are ephemeral (conversation-level). This document stays high-lev
 
 **Last Updated**: [YYYY-MM-DD]
 **Review Cadence**: [e.g., "Weekly on Mondays" or "Biweekly"]
-**Current Period**: [e.g., "January 2025" or "Sprint 12"]
+**Current Period**: [e.g., "March" or "Sprint 12"]

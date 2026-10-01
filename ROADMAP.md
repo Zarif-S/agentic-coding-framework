@@ -1,13 +1,5 @@
 # Roadmap - Strategic Vision
 
-## 📍 Breadcrumbs
-
-- **New to the project?** → [CLAUDE.md](CLAUDE.md) for setup and overview
-- **Looking for current work?** → [PROJECT_PLAN.md](PROJECT_PLAN.md)
-- **Looking for implementation details?** → [CLAUDE.md - Task Navigation](CLAUDE.md#-documentation-navigation)
-
----
-
 ## Purpose of This Document
 
 **ROADMAP.md** is your strategic compass:
@@ -32,7 +24,7 @@
 
 ---
 
-## Current Quarter: Q1 2025 (Jan - Mar)
+## Current Quarter: [Quarter Year] ([Months])
 
 **Strategic Goal**: [What we're achieving this quarter - e.g., "Establish ML pipeline foundation"]
 
@@ -54,7 +46,7 @@
 
 ---
 
-## Next Quarter: Q2 2025 (Apr - Jun)
+## Next Quarter: [Quarter Year] ([Months])
 
 **Themes**: [High-level focus areas - no detailed breakdown yet]
 
@@ -63,46 +55,28 @@ Example themes:
 - A/B testing framework for model comparison
 - Monitoring and observability for ML systems
 
-*Detailed initiatives will be defined as Q1 progresses.*
+*Detailed initiatives will be defined as the current quarter progresses.*
 
 ---
 
-## Beyond Q2: Longer-Term Vision
+## Beyond Next Quarter: Longer-Term Vision
 
 **Where we're heading**: [1-2 paragraphs describing aspirational goals]
 
-Example: "By end of 2025, we aim to have a fully automated ML pipeline capable of continuous training, evaluation, and deployment. This includes automated feature engineering, model selection, hyperparameter tuning, and production deployment with rollback capabilities. Success means data scientists spend less time on infrastructure and more time on model innovation."
+Example: "By the end of next year, we aim to have a fully automated ML pipeline capable of continuous training, evaluation, and deployment. This includes automated feature engineering, model selection, hyperparameter tuning, and production deployment with rollback capabilities. Success means data scientists spend less time on infrastructure and more time on model innovation."
 
 **Key milestones** (subject to change):
-- Automated retraining pipeline (H2 2025)
-- Multi-model A/B testing framework (H2 2025)
-- Real-time feature serving (2026)
+- [e.g., "Automated retraining pipeline (H2 YYYY)"]
+- [e.g., "Multi-model A/B testing framework (H2 YYYY)"]
+- [e.g., "Real-time feature serving (YYYY)"]
 
 ---
 
-## Key Strategic Decisions (Optional)
+## Key Decisions
 
-Use this section to document major architectural or technical choices that shape the roadmap.
+Decisions that shape the roadmap are recorded in [DECISIONS.md](DECISIONS.md), not here. Link the relevant ADRs:
 
-### Decision 1: [e.g., "Python ML Stack vs Cloud-Native Tools"]
-
-**Decision**: [What was decided - e.g., "Use scikit-learn/PyTorch with MLflow for flexibility, deploy on cloud infrastructure"]
-
-**Rationale**:
-- **For**: [Reasons - e.g., "Team expertise in Python, more control over model implementation, vendor independence"]
-- **Against**: [Trade-offs - e.g., "More infrastructure work than fully managed solutions"]
-
-**Review when**: [Trigger - e.g., "Team size doubles or cloud costs exceed $X/month"]
-
-### Decision 2: [e.g., "Batch vs Real-time Predictions"]
-
-**Decision**: [What was decided - e.g., "Start with batch predictions, add real-time serving in Q3"]
-
-**Rationale**:
-- **For**: [Reasons - e.g., "Simpler to implement, meets current business needs"]
-- **Against**: [Trade-offs - e.g., "May need architecture changes for real-time later"]
-
-**Review when**: [Trigger - e.g., "Business requests <1 second prediction latency"]
+- [e.g., "Batch predictions before real-time serving: ADR-002"]
 
 ---
 
@@ -115,3 +89,4 @@ Use this section to document major architectural or technical choices that shape
 - [PROJECT_PLAN.md](PROJECT_PLAN.md) - Current tactical execution
 - [CLAUDE.md](CLAUDE.md) - Implementation guidance
 - [CHANGELOG.md](CHANGELOG.md) - Completed feature history
+- [DECISIONS.md](DECISIONS.md) - Why we chose what we chose

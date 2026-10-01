@@ -12,7 +12,8 @@ Generate a new concept `CLAUDE.md` for the agentic coding framework using the st
    - Actions: each action's name, signature, and what it does
    - Invariants: properties that must always hold (data guarantees, boundary conditions, ordering rules)
    - Common tasks: 1–3 recurring developer tasks with steps or commands
-   - Any known issues or implementation decisions worth documenting upfront
+   - Any gotchas or known issues worth documenting upfront
+   - Any design choices made between alternatives (these become ADRs, not part of the concept file)
 
    If the user has already provided some of this, skip asking for what you already have.
 
@@ -26,15 +27,16 @@ Generate a new concept `CLAUDE.md` for the agentic coding framework using the st
 
 3. **Generate the file** — Write `CLAUDE.md` to the specified path using the exact template below. Fill in all placeholders; do not leave any `[...]` unfilled.
 
-4. **Update root navigation** — Open the root `CLAUDE.md` and add a row to the Documentation Navigation table pointing to the new file:
+4. **Register the concept** — Open the root `CLAUDE.md` and add a line under the `**Concepts**:` list in the Key Docs section:
    ```
-   │ [Concept name]     → [path/to/concept/CLAUDE.md] │
+   - [Concept name]: `[path/to/concept/CLAUDE.md]`
    ```
-   Only add this row if the root `CLAUDE.md` has a navigation table. Do not modify any other part of the root file.
+   If the list still contains the `[Concept name]` placeholder line, replace it. Do not modify any other part of the root file.
 
 5. **Confirm** — Tell the user:
    - The file path created
-   - Whether the root navigation was updated
+   - Whether the root Concepts list was updated
+   - If the user described design choices between alternatives: "Record these with `/decision` so the reasoning is kept in DECISIONS.md."
    - The next step: "If this concept coordinates with others, define the event flow in `SYNCHRONIZATIONS.md` using `/sync-flow`."
 
 ---
@@ -44,13 +46,7 @@ Generate a new concept `CLAUDE.md` for the agentic coding framework using the st
 ```markdown
 # [Concept Name] - [Project Name]
 
-## Breadcrumbs
-- **Project setup** → [Root CLAUDE.md](../../CLAUDE.md)
-- **Strategic context** → [ROADMAP.md](../../ROADMAP.md)
-- **Current sprint** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
-- **Cross-module flows** → [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md)
-
-> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in SYNCHRONIZATIONS.md — not here.
+> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in [SYNCHRONIZATIONS.md]([relative/path/to/SYNCHRONIZATIONS.md]), not here.
 
 ---
 
@@ -94,15 +90,9 @@ Generate a new concept `CLAUDE.md` for the agentic coding framework using the st
 
 ---
 
-## Implementation Notes
+## Gotchas
 
-### [Pattern/Decision Name]
-
-**Issue**: [What problem does this solve?]
-
-**Solution**: [Approach chosen and why]
-
-**Location**: `[file:line]`
+- **[Short title]**: [What happens and what to do instead.] (`[file:line]`)
 
 ---
 
@@ -125,5 +115,6 @@ Generate a new concept `CLAUDE.md` for the agentic coding framework using the st
 - Never put cross-concept coordination logic inside the generated file — always redirect to `SYNCHRONIZATIONS.md`
 - The Architecture section must be an ASCII diagram, not prose
 - Invariants must be falsifiable statements, not vague goals ("status must be one of X, Y, Z" not "status should be valid")
-- If the user provides no known issues or implementation notes, omit those sections entirely rather than leaving placeholder text
-- Keep breadcrumb paths relative and correct for the actual file location
+- If the user provides no gotchas or known issues, omit those sections entirely rather than leaving placeholder text
+- Never write design rationale ("we chose X because...") into the concept file; that belongs in DECISIONS.md via `/decision`
+- Keep the SYNCHRONIZATIONS.md link relative and correct for the actual file location

@@ -2,14 +2,6 @@
 
 This guide covers optional patterns for teams that need more sophisticated documentation management as their projects grow.
 
-## 📍 Breadcrumbs
-
-- **New to this framework?** → [README.md](../README.md) for overview
-- **Looking for core templates?** → [Root CLAUDE.md](../CLAUDE.md), [ROADMAP.md](../ROADMAP.md), [PROJECT_PLAN.md](../PROJECT_PLAN.md)
-- **Looking for examples?** → [examples/ml-workflow/](../examples/ml-workflow/)
-
----
-
 ## Quick Navigation
 
 - [1. DOCS.md Index Pattern](#1-docsmd-index-pattern) - For projects with 10+ documented folders
@@ -18,6 +10,8 @@ This guide covers optional patterns for teams that need more sophisticated docum
 - [4. Conflict Detection Patterns](#4-conflict-detection-patterns) - For multiple editors
 - [5. Multi-Folder Strategy Guide](#5-multi-folder-strategy-guide) - For evolving project structures
 - [6. Scheduled Retrospectives](#6-scheduled-retrospectives) - For continuous improvement
+- [7. Enforcing Conventions in Code](#7-enforcing-conventions-in-code) - When the agent keeps missing the same details
+- [8. Hooks](#8-hooks) - When a reminder isn't enough
 
 ---
 
@@ -364,13 +358,12 @@ api-gateway/
 **Splitting an Existing Root CLAUDE.md**:
 1. Identify section that meets threshold criteria
 2. Create subfolder CLAUDE.md with:
-   - Breadcrumbs back to root
    - Architecture specific to that module
    - Design patterns and integration guides
 3. Update root CLAUDE.md:
    - Replace detailed section with brief overview (2-3 sentences)
    - Add link to subfolder CLAUDE.md
-   - Update task navigation table
+   - Add it to the Concepts list in Key Docs
 4. Update DOCS.md index if you have one
 
 ### Example: Before and After Split
@@ -406,9 +399,6 @@ The ML workflow handles end-to-end ML pipeline from data to trained models.
 **ml-workflow/CLAUDE.md**:
 ```markdown
 # ML Workflow Module - Data Science Documentation Example
-
-## 📍 Breadcrumbs
-- **New to the project?** → [Root CLAUDE.md](../../CLAUDE.md)
 
 [Full detailed content - 1200 words]
 ```
@@ -453,7 +443,7 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 
 **Documentation Health Metrics**:
 
-| Metric | Q1 2025 | Q2 2025 | Trend | Target |
+| Metric | Last quarter | This quarter | Trend | Target |
 |--------|---------|---------|-------|--------|
 | **Time to find info** (avg) | 45s | 30s | ⬇️ Good | <30s |
 | **Documentation debt items** | 12 | 8 | ⬇️ Good | <5 high priority |
@@ -485,8 +475,8 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
    - What's causing drift?
 
 4. **AI Agent Experience**: (Ask Claude to participate!)
-   - Were breadcrumbs helpful?
-   - Was task navigation effective?
+   - Was anything in CLAUDE.md wrong or out of date?
+   - Which conventions did the agent keep missing? (Candidates for section 7 or 8)
    - Any confusing contradictions?
 
 #### Part 3: Process Review (15 minutes)
@@ -548,6 +538,200 @@ Ensures documentation framework evolves with team needs, prevents stagnation or 
 
 ---
 
+## 7. Enforcing Conventions in Code
+
+### When to Use
+
+- **Problem**: The agent keeps missing the same detail (an unlabelled plot, a hardcoded parameter) even though CLAUDE.md has a rule for it
+- **Signal**: The same entry shows up twice in LESSONS_LEARNED.md
+
+### What It Solves
+
+A rule in CLAUDE.md is a request. Code that refuses to run when the rule is broken is a guarantee. If the easiest path for the agent is also the correct one, it stops forgetting.
+
+### Implementation
+
+The snippets below are **examples for a Python/matplotlib project**. Copy what fits into your package and adapt it; they aren't part of the framework.
+
+**Config: parameters fail loudly when missing or misspelled** (requires `pydantic`, `pyyaml`)
+
+```python
+from pathlib import Path
+
+import yaml
+from pydantic import BaseModel, ConfigDict
+
+
+class Strict(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)  # typos and unknown keys fail
+
+
+class TrainConfig(Strict):
+    learning_rate: float  # no defaults: a missing value fails at load time
+    n_epochs: int
+    seed: int
+
+
+class ExperimentConfig(Strict):
+    name: str
+    data_path: Path
+    train: TrainConfig
+
+
+def load_config(path: str | Path) -> ExperimentConfig:
+    return ExperimentConfig.model_validate(yaml.safe_load(Path(path).read_text()))
+```
+
+Functions then take values explicitly (`train(lr=cfg.train.learning_rate, ...)`), and a notebook cell is just `cfg = load_config("config/baseline.yaml")` followed by function calls.
+
+**Plots: refuse to save an incomplete figure** (matplotlib, so seaborn too)
+
+```python
+from pathlib import Path
+
+from matplotlib.figure import Figure
+
+
+def save_figure(fig: Figure, path: str | Path, *, dpi: int = 150) -> Path:
+    """Save a figure, refusing if any axes lacks a title, axis labels, or series labels."""
+    problems = []
+    for i, ax in enumerate(fig.get_axes()):
+        if ax.get_label() == "<colorbar>":  # colorbars have no title/labels of their own
+            continue
+        for part, value in [("title", ax.get_title()), ("x label", ax.get_xlabel()), ("y label", ax.get_ylabel())]:
+            if not value:
+                problems.append(f"axes {i}: missing {part}")
+        n_series = len(ax.lines) + len(ax.collections) + len(ax.containers)
+        if n_series > 1:
+            if not ax.get_legend_handles_labels()[1]:
+                problems.append(f"axes {i}: {n_series} series but none has label=")
+            elif ax.get_legend() is None:
+                ax.legend()
+    if problems:
+        raise ValueError("Figure not saved:\n  " + "\n  ".join(problems))
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=dpi, bbox_inches="tight")
+    return path
+```
+
+**Other stacks**: the same idea applies wherever the agent keeps slipping.
+- Plotly: check `fig.layout.title.text` and axis titles before `write_image`
+- RAG / LLM apps: load prompt templates from files through one function, so prompts never end up as inline strings scattered through the code
+- Evaluation: read eval datasets and thresholds from config, so a "quick test" can't quietly change the benchmark
+
+### Best Practices
+
+1. **Add enforcement after the second miss**, not up front. Code you don't need is more template to maintain
+2. **Keep the CLAUDE.md rule** as well: it tells the agent *which* helper to use
+3. **Fail with a message that says how to fix it**; the agent reads the error and corrects itself
+
+---
+
+## 8. Hooks
+
+### When to Use
+
+- **Problem**: A CLAUDE.md rule or a section 7 helper still isn't enough; the agent finishes without checking, or the rule can't be enforced from inside your code
+- **Requirement**: Claude Code (hooks are a Claude Code feature)
+
+### What It Solves
+
+Hooks are scripts Claude Code runs automatically at fixed points (after a tool call, before the agent stops). They run every time, whether or not the agent remembers. A hook that exits with code 2 sends its stderr back to the agent.
+
+### Implementation
+
+These are **opt-in examples**. They're documented here rather than shipped in `.claude/settings.json`, because copying `.claude/` into a project would otherwise switch them on without anyone deciding to. Check the [Claude Code hooks docs](https://docs.claude.com/en/docs/claude-code/hooks) for the current input format before relying on them.
+
+**1. Definition of Done before stopping** (`.claude/hooks/definition_of_done.py`)
+
+```python
+"""Stop hook: before finishing with uncommitted changes, send the agent back once to run its Definition of Done."""
+import json
+import subprocess
+import sys
+
+event = json.load(sys.stdin)
+if event.get("stop_hook_active"):  # already sent back once this turn; let it stop
+    sys.exit(0)
+status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+if status.returncode != 0 or not status.stdout.strip():
+    sys.exit(0)  # not a git repo, or nothing changed: nothing to check
+
+print(
+    "Before finishing: walk through the Definition of Done in CLAUDE.md against your diff "
+    "(or run /check-done) and report any convention you didn't meet.",
+    file=sys.stderr,
+)
+sys.exit(2)  # exit 2 = block stopping and show stderr to Claude
+```
+
+`git status --porcelain` includes untracked files and works before the first commit, so a task that only adds new files still triggers it.
+
+**2. Numeric literals in notebook cells** (`.claude/hooks/notebook_literals.py`)
+
+```python
+"""PostToolUse hook: flag numeric literals assigned in notebook cells (they belong in config)."""
+import ast
+import json
+import sys
+
+event = json.load(sys.stdin)
+tool_input = event.get("tool_input", {})
+path = tool_input.get("notebook_path") or tool_input.get("file_path", "")
+if not path.endswith(".ipynb"):
+    sys.exit(0)
+
+problems = []
+with open(path) as f:
+    cells = json.load(f)["cells"]
+for n, cell in enumerate(cells):
+    if cell["cell_type"] != "code":
+        continue
+    lines = "".join(cell["source"]).splitlines()
+    # blank out %magics and !shell lines so ast can parse the cell and line numbers stay right
+    source = "\n".join("" if line.lstrip().startswith(("%", "!")) else line for line in lines)
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        continue
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant)
+                and isinstance(node.value.value, (int, float)) and not isinstance(node.value.value, bool)):
+            problems.append(f"cell {n}, line {node.lineno}: {ast.unparse(node)}")
+
+if problems:
+    print("Numeric literals in notebook cells; move them to config:\n  " + "\n  ".join(problems), file=sys.stderr)
+    sys.exit(2)  # exit 2 = show stderr to Claude (the edit itself has already happened)
+```
+
+**Register both** in `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "python3 .claude/hooks/definition_of_done.py" }] }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [{ "type": "command", "command": "python3 .claude/hooks/notebook_literals.py" }]
+      }
+    ]
+  }
+}
+```
+
+### Best Practices
+
+1. **One hook per recurring problem.** Each one runs on every matching event, so keep them fast and specific
+2. **Make the message actionable**: say what's wrong and what to do, since the agent acts on it directly
+3. **Guard Stop hooks** with `stop_hook_active` so they send the agent back at most once
+4. **Start with a CLAUDE.md rule**; promote it to a hook only when the rule keeps being ignored
+
+---
+
 ## Combining Features
 
 These patterns work best when combined strategically:
@@ -586,14 +770,13 @@ While this framework starts documentation-only, teams may eventually want automa
 
 ### AI-Assisted Ideas
 - Use Claude to detect contradictions in docs
-- Auto-generate breadcrumb links
 - Suggest when to split CLAUDE.md based on file count
 
 **Note**: Start manual, automate only when pain points are clear.
 
 ---
 
-**Last Updated**: 2025-01-31
+**Last Updated**: 2026-10-01
 **Status**: Comprehensive guide for advanced patterns
 
 ---
@@ -601,4 +784,4 @@ While this framework starts documentation-only, teams may eventually want automa
 **Related Documentation**:
 - [README.md](../README.md) - Framework overview
 - [CLAUDE.md](../CLAUDE.md) - Core template
-- [PROJECT_PLAN.md](../PROJECT_PLAN.md#documentation-debt) - Debt tracking implementation
+- [CONTRIBUTING.md](../CONTRIBUTING.md#documentation-practices) - Debt tracking implementation

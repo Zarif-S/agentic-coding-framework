@@ -1,12 +1,6 @@
 # [Module Name] - [Your Project Name]
 
-## Breadcrumbs
-- **Project setup** → [Root CLAUDE.md](../../CLAUDE.md)
-- **Strategic context** → [ROADMAP.md](../../ROADMAP.md)
-- **Current sprint** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
-- **Cross-module flows** → [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md)
-
-> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in SYNCHRONIZATIONS.md — not here.
+> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md), not here.
 
 ---
 
@@ -139,19 +133,11 @@ Trained Model + Metrics
 
 ---
 
-## Implementation Notes
+## Gotchas
 
-### [Pattern/Decision Name]
+Non-obvious things that will trip you up in this concept. (Decisions go in the root DECISIONS.md, not here.)
 
-**Issue**: [What problem does this solve?]
-
-**Solution**: [Approach chosen and why]
-
-**Location**: `[file:line]`
-
-```python
-# example
-```
+- **[Short title]**: [What happens and what to do instead.] (`[file:line]`)
 
 ---
 

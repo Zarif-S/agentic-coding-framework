@@ -9,7 +9,7 @@ Thank you for your interest in improving this framework! This guide will help yo
 ### Reporting Issues
 
 **Found a problem?**
-- Check [existing issues](https://github.com/your-username/agentic-coding-framework/issues) first
+- Check [existing issues](https://github.com/Zarif-S/agentic-coding-framework/issues) first
 - Create a new issue with:
   - Clear title describing the problem
   - Steps to reproduce (if applicable)
@@ -31,7 +31,7 @@ Thank you for your interest in improving this framework! This guide will help yo
 # Fork the repository on GitHub, then:
 git clone https://github.com/your-username/agentic-coding-framework.git
 cd agentic-coding-framework
-git remote add upstream https://github.com/original-owner/agentic-coding-framework.git
+git remote add upstream https://github.com/Zarif-S/agentic-coding-framework.git
 ```
 
 ### 2. Create a Branch
@@ -62,7 +62,6 @@ git checkout -b fix/issue-description
 - Copy templates to a test project
 - Verify all links work
 - Check that examples are accurate
-- Ensure breadcrumbs navigate correctly
 
 **Checklist**:
 - [ ] All internal links work
@@ -160,6 +159,8 @@ When completing a task or merging a PR, ask: **"Which docs does this affect?"**
 - [ ] **CLAUDE.md** (root) - Setup, project structure, or common tasks changed?
 - [ ] **CLAUDE.md** (subfolder) - Module architecture or patterns changed?
 - [ ] **CHANGELOG.md** - User-facing feature, breaking change, or significant improvement?
+- [ ] **DECISIONS.md** - Chose between alternatives? Add an ADR (`/decision`)
+- [ ] **LESSONS_LEARNED.md** - Something went wrong that shouldn't happen again?
 - [ ] **Code comments** - Complex logic that needs explanation?
 
 **If yes to any**: Update the doc, add a TODO, or create an issue.
@@ -199,10 +200,10 @@ Related: PR #123
 
 When contributing, keep these principles in mind:
 
-### 1. Context Efficiency Over Completeness
-- AI agents need focused context, not exhaustive docs
-- 2-5KB of targeted docs > 50KB of comprehensive docs
-- Task-oriented navigation over encyclopedic coverage
+### 1. Document What Code Can't Say
+- Spend docs on intent, decisions, and conventions, not on restating code
+- Stale docs mislead agents more than missing ones
+- Root CLAUDE.md loads into every session; every line should earn its place
 
 ### 2. Flexible Guidelines, Not Rigid Rules
 - Provide guidance, not strict requirements
@@ -276,7 +277,7 @@ Report issues to: [maintainer email or GitHub reporting mechanism]
 
 **Questions about the framework?**
 - Check existing documentation first
-- Search [closed issues](https://github.com/your-username/agentic-coding-framework/issues?q=is%3Aissue+is%3Aclosed)
+- Search [closed issues](https://github.com/Zarif-S/agentic-coding-framework/issues?q=is%3Aissue+is%3Aclosed)
 - Open a new issue with the "question" label
 
 **Questions about your PR?**

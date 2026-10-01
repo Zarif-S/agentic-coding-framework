@@ -1,12 +1,6 @@
 # Deployment - ML Workflow Example Project
 
-## Breadcrumbs
-- **Project setup** → [Root CLAUDE.md](../../CLAUDE.md)
-- **Strategic context** → [ROADMAP.md](../../ROADMAP.md)
-- **Current sprint** → [PROJECT_PLAN.md](../../PROJECT_PLAN.md)
-- **Cross-module flows** → [examples/SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md)
-
-> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in SYNCHRONIZATIONS.md — not here.
+> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md), not here.
 
 ---
 
@@ -99,15 +93,9 @@ Sets status to `idle`. The serving endpoint will return a 503 until a new model 
 
 ---
 
-## Implementation Notes
+## Gotchas
 
-### Deployment ID stability
-
-**Issue**: Callers (monitoring, alerts, rollout configs) hold references to a `deployment_id`. If it changes on every promotion, those references break.
-
-**Solution**: `deployment_id` identifies the *slot*, not the model. It is assigned once at `stage` time and remains stable through promotion, rollback, and retirement for that deployment slot.
-
-**Location**: `deployment/manager.py:42`
+- **`deployment_id` identifies the slot, not the model**: it's assigned once at `stage` and stays the same through promotion, rollback, and retirement. Don't regenerate it on `promote`; monitoring, alerts, and rollout configs hold references to it. (`deployment/manager.py:42`)
 
 ---
 

@@ -1,6 +1,6 @@
-# Strategic Agentic Coding: Planning and Context Efficiency Framework
+# Strategic Agentic Coding: A Documentation Framework for AI Agents
 
-This repo outlines an approach to coding in the era of AI agents. It maximizes the value of strategic decisions and maintains clear documentation for optimal context efficiency when working with AI coding assistants.
+A template you copy into a new project at the start, so the coding agent knows the goals, the conventions and the reasons behind past decisions before the work is scoped.
 
 This framework encourages building with a product and project focused mindset from the outset, ensuring technical decisions align with strategic goals.
 
@@ -8,31 +8,31 @@ This framework encourages building with a product and project focused mindset fr
 
 ## Why This Framework Exists
 
-**The Problem**: AI coding agents require context to work effectively. Traditional documentation approaches either:
-- Provide too much context (overwhelming, slow to parse)
-- Provide too little context (agents make wrong assumptions)
-- Lack strategic clarity (agents can't align with long-term vision)
-- Force agents to rebuild context from scratch on every interaction
+**The Problem**: Current agents read code quickly, but code doesn't say why it exists or what "done" means. Without that, agents:
+- Make reasonable-looking guesses that contradict earlier decisions
+- Miss project conventions nobody wrote down (plots without legends, parameters hardcoded in notebooks)
+- Lose the reasoning behind choices once plans are rewritten
+- Can't align their work with the long-term vision
 
-**The Solution**: A hierarchical documentation system that enables rapid context rebuilding at any altitude:
+**The Solution**: Document what code can't say, each kind of thing in one place:
 
-1. **Multi-level context access**: Agents can quickly rebuild context from either:
-   - **Higher level** (strategic): "Why are we building this? What's the vision?" → ROADMAP.md
-   - **Lower level** (implementation): "How does this module work? What patterns do we use?" → CLAUDE.md
+1. **Intent at two levels**:
+   - **Strategic**: "Why are we building this? What's the vision?" → ROADMAP.md and PROJECT_PLAN.md
+   - **Implementation**: "How does this module work? What conventions apply?" → CLAUDE.md
 
-2. **Right-sized context**: Makes it easier and quicker for agents to find exactly what they need, at the right level of detail
+2. **Conventions and a Definition of Done**: Specific, checkable rules in CLAUDE.md, checked with `/check-done` before a task is reported finished
 
-3. **Strategic alignment**: Clear separation between vision (ROADMAP) and execution (PROJECT_PLAN) ensures agents understand both what to build and why
+3. **One home for decisions**: Reasons and rejected options go in DECISIONS.md, so they survive when plans change
 
-4. **Workflow-aware design**: Aims to reduce documentation friction through focused context and batch updates, minimising the cost of finding and maintaining documentation
+4. **Lessons that become rules**: Mistakes go in LESSONS_LEARNED.md and are promoted to Conventions, so the agent doesn't repeat them
 
 ---
 
 ## Success Criteria
 
 This framework is working when:
-- ✅ Developers can quickly find the correct documentation from any entry point
-- ✅ AI agents receive **exactly the context they need** without excess
+- ✅ The agent follows project conventions without being reminded
+- ✅ The agent says what it did **not** verify, instead of reporting everything done
 - ✅ Documentation updates have **minimal workflow disruption**
 - ✅ Strategic decisions are **preserved and discoverable** months later
 
@@ -49,6 +49,8 @@ your-project/
 ├── ROADMAP.md                   # Strategic vision (quarters/years)
 ├── PROJECT_PLAN.md              # Tactical execution (weeks/months)
 ├── CHANGELOG.md                 # Feature and change history
+├── DECISIONS.md                 # Why we chose X over Y (ADRs)
+├── LESSONS_LEARNED.md           # What went wrong and what we do now
 ├── SYNCHRONIZATIONS.md          # Cross-concept event flows
 ├── CONTRIBUTING.md              # Contributor guidelines
 │
@@ -65,7 +67,8 @@ your-project/
 | High-level architecture | ✓ Overview | Detailed design | |
 | Design patterns | Mention | Explain + examples | Reference |
 | API contracts | Link | Full specification | Implementation notes |
-| Why decisions made | Strategic context | Technical rationale | Edge cases |
+| Why decisions made | Link to ADR in DECISIONS.md | Link to ADR in DECISIONS.md | Edge cases |
+| Conventions & Definition of Done | ✓ Primary | Module-specific additions | |
 | How to extend | General guidance | Specific steps | Implementation details |
 
 ### Document Purposes
@@ -77,7 +80,11 @@ your-project/
 | **CLAUDE.md** (root) | Always current | Navigation hub + setup | Task routing, env setup, common commands |
 | **CLAUDE.md** (subfolder) | Always current | Architecture + patterns | Component design, integration guides |
 | **SYNCHRONIZATIONS.md** | Always current | Cross-concept event flows | "When user.delete fires → post.deleteAll follows" |
-| **CHANGELOG.md** | Historical | Feature history | "v2.1.0: Added rate limiting" |
+| **CHANGELOG.md** | Historical | *What* changed | "v2.1.0: Added rate limiting" |
+| **DECISIONS.md** | Historical, append-only | *Why* we chose X over Y | "ADR-004: Batch predictions before real-time serving" |
+| **LESSONS_LEARNED.md** | Historical, append-only | What experience taught us, and the rule it led to | "LL-002: Agent skipped legends → `save_figure()` helper" |
+
+**Roadmap, plan, changelog, and decisions answer different questions.** The roadmap and plan look forward and get rewritten, so any "why" written there disappears as they change. The changelog records what happened but not the reasoning. DECISIONS.md is the one place the reasoning, including the options you rejected, is kept.
 
 ---
 
@@ -89,7 +96,7 @@ your-project/
 
 ```bash
 # Clone this template
-git clone https://github.com/your-username/agentic-coding-framework.git
+git clone https://github.com/Zarif-S/agentic-coding-framework.git
 
 # Copy core files to your project
 cp agentic-coding-framework/CLAUDE.md your-project/
@@ -97,6 +104,8 @@ cp agentic-coding-framework/ROADMAP.md your-project/
 cp agentic-coding-framework/PROJECT_PLAN.md your-project/
 cp agentic-coding-framework/CHANGELOG.md your-project/
 cp agentic-coding-framework/SYNCHRONIZATIONS.md your-project/
+cp agentic-coding-framework/DECISIONS.md your-project/
+cp agentic-coding-framework/LESSONS_LEARNED.md your-project/
 
 # Copy example subfolder CLAUDE.md
 cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
@@ -104,7 +113,7 @@ cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your
 
 ### 2. Customize for Your Project
 
-1. **Edit `CLAUDE.md`**: Replace placeholder content with your project structure, setup steps, and task navigation
+1. **Edit `CLAUDE.md`**: Replace placeholders with your project's stack, commands, and Conventions. The Conventions and Definition of Done sections are what stop the agent missing details, so make them specific to your project
 2. **Edit `ROADMAP.md`**: Add your strategic goals and milestones
 3. **Edit `PROJECT_PLAN.md`**: Add current sprint/iteration plans
 4. **Edit `CHANGELOG.md`**: Document your first version
@@ -117,17 +126,20 @@ If you use Claude Code, copy the included skills into your project:
 cp -r agentic-coding-framework/.claude your-project/
 ```
 
-This gives you five `/commands` that automate the most common framework tasks:
+This gives you seven `/commands` that automate the most common framework tasks, plus `/teach`:
 
-| Skill | What it does |
+| Command | What it does |
 |-------|-------------|
 | `/concept-spec` | Guided wizard to generate a new concept `CLAUDE.md` |
-| `/plan-feature` | Plans a feature and triages which docs need updating |
+| `/plan-feature` | Plans a feature, triages which docs need updating, and asks whether a decision needs recording |
+| `/decision` | Appends an ADR to `DECISIONS.md` (options considered, decision, consequences) |
+| `/check-done` | Checks the current diff against CLAUDE.md's Conventions and Definition of Done, including opening any changed figures |
 | `/sync-flow` | Adds a new SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
 | `/changelog-gen` | Parses recent commits and drafts `CHANGELOG.md` entries |
-| `/doc-health` | Scans all docs for broken links, stale dates, missing sections |
+| `/doc-health` | Scans all docs for broken links, stale dates, missing sections, leftover placeholders |
+| `/teach` | Not a framework command: teaches you a topic over several sessions, keeping `MISSION.md`, `GLOSSARY.md` and learning records in the current directory. Run it in a separate folder, not your project root |
 
-See [`.claude/skills/`](.claude/skills/) for the full skill definitions.
+See [`.claude/commands/`](.claude/commands/) for the full command definitions.
 
 ### 4. Start Using with AI Agents
 
@@ -180,6 +192,21 @@ The agent translates each SYNC entry directly into a function. If an entry is am
 
 Keep prompts scoped to one concept or one sync at a time. The instinct is to say "build the whole pipeline" — resist it. The framework only pays off if the agent operates within concept boundaries, and it will as long as your prompts respect them too.
 
+### Keeping the agent careful
+
+Agents tend to rush and miss small details: a plot without a legend, a parameter hardcoded in a notebook instead of config. This is mostly a missing-convention problem, not a speed problem. Without a stated rule, the agent does whatever is most common. In order of payoff:
+
+1. **Write the convention down**, specifically, in CLAUDE.md's Conventions section. "No literals in notebook cells" works; "write clean code" doesn't.
+2. **Plan before editing.** Use plan mode (Shift+Tab in Claude Code) for anything non-trivial, or start with: *"Before writing code, tell me your assumptions and where any new parameters will live."*
+3. **Keep tasks small.** Details get dropped when one prompt asks for five things.
+4. **Make it check its own output.** Run `/check-done` before calling a task finished. For plots, the agent must open the saved image; it can't see a missing legend otherwise.
+5. **Review with fresh context.** Ask a subagent (or a new session) to review the diff against Conventions. Fresh eyes catch what the author missed.
+6. **Escalate repeat misses**: first a LESSONS_LEARNED entry, then code that enforces the rule, then a hook. See [Advanced Features 7–8](docs/ADVANCED_FEATURES.md#7-enforcing-conventions-in-code).
+
+### Recording decisions as you go
+
+When you and the agent choose between alternatives (a library, a data format, where something lives), run `/decision` right then, while the context is in the conversation. Writing ADRs after the fact is how they end up never written.
+
 ### What this buys you
 
 - **Smaller agent tasks**: Each prompt has a clear boundary. The agent isn't holding the whole system in context at once.
@@ -229,6 +256,16 @@ Once you're comfortable with the core framework, explore these optional patterns
 - Questions about doc effectiveness
 - See: [docs/ADVANCED_FEATURES.md#retrospectives](docs/ADVANCED_FEATURES.md#retrospectives)
 
+### 7. Enforcing Conventions in Code
+**When to use**: The agent keeps missing the same detail despite a CLAUDE.md rule
+- Example config and figure helpers that fail loudly
+- See: [docs/ADVANCED_FEATURES.md#7-enforcing-conventions-in-code](docs/ADVANCED_FEATURES.md#7-enforcing-conventions-in-code)
+
+### 8. Hooks
+**When to use**: A rule needs to run every time, not when remembered
+- Opt-in Stop and PostToolUse hook examples for Claude Code
+- See: [docs/ADVANCED_FEATURES.md#8-hooks](docs/ADVANCED_FEATURES.md#8-hooks)
+
 ---
 
 ## Real-World Example
@@ -260,11 +297,13 @@ The "What Goes Where" table is a guide, not a law. Use your judgment:
 - If a detail feels important at multiple levels, include it at both
 - Optimize for **findability**, not purity
 
-### 3. Context Efficiency Over Completeness
-AI agents work best with:
-- **Focused context**: 2-5KB of targeted docs beats 50KB of comprehensive docs
-- **Task-oriented navigation**: "What are you trying to do?" not "Here's everything"
-- **Breadcrumbs**: Clear paths between related documents
+### 3. Document What Code Can't Say
+Agents read code quickly; they can't read your intent. Spend documentation on:
+- **Why**: decisions and rejected alternatives (DECISIONS.md)
+- **Rules**: conventions and the Definition of Done (CLAUDE.md)
+- **Direction**: what we're doing now and next (PROJECT_PLAN.md)
+
+Don't spend it on restating file structure or code the agent can read directly; that drifts out of date and a stale doc misleads more than a missing one. Root CLAUDE.md is loaded into every session, so every line in it should earn its place.
 
 ### 4. No Workflow Interruption
 Documentation should:
@@ -352,17 +391,9 @@ This framework is designed to evolve. Potential enhancements being considered:
 
 ### 5. Claude Skills Integration ✅
 
-**Shipped**: Five Claude Code skills are included in `.claude/skills/` and ready to copy into any project:
+**Shipped**: Seven Claude Code commands are included in `.claude/commands/` and ready to copy into any project. See the table in [Quick Start step 3](#3-copy-the-claude-skills-optional).
 
-| Skill | Purpose |
-|-------|---------|
-| `/concept-spec` | Generate a new concept `CLAUDE.md` with state/actions/invariants |
-| `/plan-feature` | Plan a feature and triage doc updates across the hierarchy |
-| `/sync-flow` | Add a SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
-| `/changelog-gen` | Draft `[Unreleased]` changelog entries from recent commits |
-| `/doc-health` | Audit all docs for broken links, stale dates, missing sections |
-
-**Value**: Each skill enforces framework conventions automatically — concepts stay isolated, sync entries stay in SYNCHRONIZATIONS.md, and changelog entries get human-readable descriptions instead of raw commit messages.
+**Value**: Each command enforces framework conventions automatically: concepts stay isolated, decisions land in DECISIONS.md, sync entries stay in SYNCHRONIZATIONS.md, and work gets checked against the Definition of Done before it's called finished.
 
 ### 6. Framework Plugin/Extension
 
@@ -392,6 +423,6 @@ Meng, E. and Jackson, D. (2025). *What You See Is What It Does: A Structural Pat
 
 ---
 
-**Last Updated**: 2026-03-13
-**Status**: Template v1.1 - Ready for use
-**Feedback**: [GitHub Issues](https://github.com/your-username/agentic-coding-framework/issues)
+**Last Updated**: 2026-10-01
+**Status**: Template v1.2 - Ready for use
+**Feedback**: [GitHub Issues](https://github.com/Zarif-S/agentic-coding-framework/issues)
