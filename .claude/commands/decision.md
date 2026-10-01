@@ -21,7 +21,7 @@ Record a decision as an ADR in `DECISIONS.md`: what we chose, what we rejected, 
    - Consequences are all positive. Every real decision has a cost; ask what it is
    - The decision is about agent behaviour or a recurring mistake rather than a design choice. That belongs in LESSONS_LEARNED.md and the Conventions section of CLAUDE.md instead
 
-5. **Append the entry** — Add it at the end of the `## Decisions` section using the exact format below. Remove the `[Add ADR entries here...]` placeholder line if it's still there. If this supersedes an earlier ADR, change only that ADR's `**Status**` to `Superseded by ADR-NNN`; do not edit its other content.
+5. **Append the entry** — Add it at the end of the `## Decisions` section using the exact format below. Remove the `[Add ADR entries here...]` placeholder line if it's still there. If the template's commented-out example ADR (the `<!-- EXAMPLE: not a real decision ... -->` block) is still there, remove it too: it is also numbered ADR-001 and would be confused with the real one. If this supersedes an earlier ADR, change only that ADR's `**Status**` to `Superseded by ADR-NNN`; do not edit its other content.
 
 6. **Link from other docs** — If the decision relates to a PROJECT_PLAN.md item, ROADMAP.md initiative, or concept CLAUDE.md, suggest a one-line link ("see ADR-NNN"). Ask before editing those files.
 
@@ -45,8 +45,6 @@ Record a decision as an ADR in `DECISIONS.md`: what we chose, what we rejected, 
 **Decision**: [What we chose.]
 
 **Consequences**: [What gets easier, what gets harder, when we'd revisit.]
-
----
 ```
 
 ---
