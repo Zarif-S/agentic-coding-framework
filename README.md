@@ -123,7 +123,7 @@ If you use Claude Code, copy the included skills into your project:
 cp -r agentic-coding-framework/.claude your-project/
 ```
 
-This gives you seven `/commands` that automate the most common framework tasks, plus `/teach`:
+This gives you nine `/commands` that automate the most common framework tasks, plus `/teach`:
 
 | Command | What it does |
 |-------|-------------|
@@ -134,9 +134,19 @@ This gives you seven `/commands` that automate the most common framework tasks, 
 | `/sync-flow` | Adds a new SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
 | `/changelog-gen` | Parses recent commits and drafts `CHANGELOG.md` entries |
 | `/doc-health` | Scans all docs for broken links, stale dates, missing sections, leftover placeholders |
+| `/polish` | Readability pass on a milestone's code by a fresh subagent, then verifies behaviour didn't change |
+| `/walkthrough` | Writes `docs/code_walkthrough_m[N].md` so you can explain a milestone's code without reading it first |
 | `/teach` | Not a framework command: teaches you a topic over several sessions, keeping `MISSION.md`, `GLOSSARY.md` and learning records in the current directory. Run it in a separate folder, not your project root |
 
 See [`.claude/commands/`](.claude/commands/) for the full command definitions.
+
+To make the commands available in every project instead of copying them, link your user-level commands folder to this repo (`git pull` then updates them everywhere):
+
+```bash
+ln -s "$(pwd)/agentic-coding-framework/.claude/commands" ~/.claude/commands
+```
+
+Projects can still keep their own commands in `.claude/commands/`; give them names that don't clash with the shared ones.
 
 ### 4. Start Using with AI Agents
 
