@@ -43,7 +43,7 @@ For Markdown files and the markdown cells of notebooks. Agent-written text tends
 
 2. **Polish (subagent, fresh context)** — spawn a `general-purpose` agent with this brief:
 
-   > Shorten and clarify the text in these files: [files]. Follow the Writing section of CLAUDE.md.
+   > Shorten and clarify this text: [files, with the sections or cells in scope]. Leave everything else in those files as it is. Follow the Writing section of CLAUDE.md.
    > Cut repetition, filler, hedges that carry no information, and sentences that restate a table or plot sitting next to them.
    > Keep every number, reference and claim. If one is a duplicate, remove it and list it.
    > Don't touch code cells, code blocks, headings other docs link to, or ADR/LL IDs. Don't edit other files. Do not commit.
