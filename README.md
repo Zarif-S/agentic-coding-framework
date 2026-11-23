@@ -134,9 +134,38 @@ This gives you nine `/commands` that automate the most common framework tasks, p
 | `/sync-flow` | Adds a new SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
 | `/changelog-gen` | Parses recent commits and drafts `CHANGELOG.md` entries |
 | `/doc-health` | Scans all docs for broken links, stale dates, missing sections, leftover placeholders |
-| `/polish` | Readability pass on a milestone's code by a fresh subagent, then verifies behaviour didn't change |
+| `/polish` | Readability pass on a milestone's code (or, with `prose`, its docs and notebook text) by a fresh subagent, then checks nothing was lost |
 | `/walkthrough` | Writes `docs/code_walkthrough_m[N].md` so you can explain a milestone's code without reading it first |
 | `/teach` | Not a framework command: teaches you a topic over several sessions, keeping `MISSION.md`, `GLOSSARY.md` and learning records in the current directory. Run it in a separate folder, not your project root |
+
+Where each command fits in a project:
+
+```mermaid
+flowchart TD
+    subgraph setup["Setup (once)"]
+        copy["Copy templates"] --> fill["Fill in CLAUDE.md and ROADMAP.md"]
+        fill --> spec["/concept-spec for each module"]
+        spec --> sync["/sync-flow for flows between modules"]
+    end
+
+    subgraph milestone["Each milestone"]
+        plan["/plan-feature"] --> approve["Agent states the plan; you approve"]
+        approve --> build["Build"]
+        build --> done["/check-done"]
+        done --> polish["/polish"]
+        polish --> walk["/walkthrough"]
+    end
+
+    subgraph anytime["As needed"]
+        decision["/decision when a choice between alternatives is made"]
+        changelog["/changelog-gen before a release"]
+        health["/doc-health when docs feel out of sync"]
+    end
+
+    sync --> plan
+    walk -->|next milestone| plan
+    build -.-> decision
+```
 
 See [`.claude/commands/`](.claude/commands/) for the full command definitions.
 
@@ -398,7 +427,7 @@ This framework is designed to evolve. Potential enhancements being considered:
 
 ### 5. Claude Skills Integration ✅
 
-**Shipped**: Seven Claude Code commands are included in `.claude/commands/` and ready to copy into any project. See the table in [Quick Start step 3](#3-copy-the-claude-skills-optional).
+**Shipped**: Nine Claude Code commands (plus `/teach`) are included in `.claude/commands/` and ready to copy into any project. See the table in [Quick Start step 3](#3-copy-the-claude-skills-optional).
 
 **Value**: Each command enforces framework conventions automatically: concepts stay isolated, decisions land in DECISIONS.md, sync entries stay in SYNCHRONIZATIONS.md, and work gets checked against the Definition of Done before it's called finished.
 
