@@ -1,153 +1,31 @@
-# [Module Name] - [Your Project Name]
-
-> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md), not here.
-
----
-
-## Concept Specification
-
-**Purpose**: [Single sentence — what user-facing need does this concept serve?]
-
-### State
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `[field_name]` | `[type]` | [What it holds, who owns it] |
-| `[field_name]` | `[type]` | [What it holds, who owns it] |
-
-### Actions
-
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `[action]` | `([args]) → [return]` | [What it does] |
-| `[action]` | `([args]) → [return]` | [What it does] |
-
-### Invariants
-
-- [Property that must always hold, e.g. "every record must have a non-null id"]
-- [Data quality or correctness guarantee, e.g. "output shape must match input shape"]
-- [Boundary condition, e.g. "probability outputs must sum to 1.0"]
-
----
+# ML Workflow - Example Project
 
 <!--
-  EXAMPLE BELOW: Delete this section and replace with your module's content.
-  The ML Workflow concept is shown as a concrete illustration of the format above.
+  Example module CLAUDE.md. Claude Code loads it only when working in this folder.
+  It holds what the agent can't see from the code: what the module is for, the rules
+  that must not break, and the traps. Generate your own with /module-doc.
 -->
 
-## Example: ML Workflow Concept Specification
+Turns raw data into a trained, evaluated model. It sits between data loading and deployment; "The system" in the root CLAUDE.md shows the whole flow.
 
-**Purpose**: Transform raw data into trained, evaluated models ready for deployment.
+## Must not break
 
-### State
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `raw_data` | `DataFrame` | Immutable source data, never modified after ingestion |
-| `processed_data` | `DataFrame` | Cleaned and split data owned by this concept |
-| `feature_set` | `List[str]` | Active feature names for current experiment |
-| `model` | `BaseEstimator` | Trained model artifact |
-| `experiment_id` | `str` | MLflow/tracker run ID for current experiment |
-| `metrics` | `Dict[str, float]` | Evaluation results keyed by metric name |
-
-### Actions
-
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `ingest` | `(source: Path, schema: Schema) → DataFrame` | Load and validate raw data against schema |
-| `preprocess` | `(df: DataFrame, config: PrepConfig) → DataFrame` | Clean, split, normalize |
-| `engineer_features` | `(df: DataFrame, feature_list: List[str]) → DataFrame` | Apply transformations, produce feature matrix |
-| `train` | `(X: DataFrame, y: Series, config: TrainConfig) → Model` | Fit model, log to experiment tracker |
-| `evaluate` | `(model: Model, X_test: DataFrame, y_test: Series) → Metrics` | Score on held-out data, return metrics dict |
-
-### Invariants
-
-- `raw_data` is never mutated after `ingest` completes
-- `processed_data` train/test split is determined once and reused across all actions
-- All actions within an experiment share the same `experiment_id`
-- `metrics` keys are consistent across runs for the same model type
-- Feature names in `feature_set` must all exist as columns in the processed DataFrame
-
----
-
-## Architecture
-
-```
-Raw Data
-    ↓
-┌─────────────────────────────────────┐
-│ ingest(source, schema)              │
-│   • Load from source                │
-│   • Validate schema & types         │
-└─────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────┐
-│ preprocess(df, config)              │
-│   • Handle missing values           │
-│   • Normalize / standardize         │
-│   • Train/test split                │
-└─────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────┐
-│ engineer_features(df, feature_list) │
-│   • Create derived features         │
-│   • Encode categoricals             │
-└─────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────┐
-│ train(X, y, config)                 │
-│   • Fit model                       │
-│   • Log params + artifacts          │
-└─────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────┐
-│ evaluate(model, X_test, y_test)     │
-│   • Score on held-out data          │
-│   • Log metrics                     │
-└─────────────────────────────────────┘
-    ↓
-Trained Model + Metrics
-```
-
----
-
-## Common Tasks
-
-### Running a new experiment
-
-1. Create config in `config/experiments/[name].yaml`
-2. Run: `python train.py --config config/experiments/[name].yaml`
-3. Review results in MLflow UI: `mlflow ui`
-
-### Adding a new feature
-
-1. Implement transformation in `features/transformers.py`
-2. Add feature name to experiment config under `features:`
-3. Validate on sample data before running full experiment
-
-### Adding a new data source
-
-1. Create loader in `data/loaders/[source].py`
-2. Ensure it returns a DataFrame matching the expected schema
-3. Register in `config/data_sources.yaml`
-
----
+- `raw_data` is never modified after loading; cleaning returns a new frame.
+- The train/test split is made once, before anything is fitted, and every later step reuses it.
+- Scalers, encoders and imputers are fitted on training rows only.
+- All steps in one experiment log to the same `experiment_id`.
+- Metric names stay the same across runs of a model type, so runs can be compared.
 
 ## Gotchas
 
-Non-obvious things that will trip you up in this concept. (Decisions go in the root DECISIONS.md, not here.)
+- **Features dropped during cleaning fail late**: a feature listed in the experiment config but removed by cleaning only fails at training time. Check the config's feature list against the processed columns first. (`features/select.py`)
 
-- **[Short title]**: [What happens and what to do instead.] (`[file:line]`)
+## Common tasks
 
----
-
-## Known Issues & Solutions
-
-**[✅ RESOLVED | 🔄 IN PROGRESS | ⚠️ KNOWN LIMITATION]: [Title]**
-- **Issue**: [Description]
-- **Solution/Workaround**: [How it's handled]
-- **Location**: `[file:line]`
+- **Run an experiment**: create `config/experiments/[name].yaml`, run `python train.py --config config/experiments/[name].yaml`, and review it in `mlflow ui`.
+- **Add a feature**: implement it in `features/transformers.py`, add its name under `features:` in the experiment config, and check it on a sample before a full run.
+- **Add a data source**: write a loader in `data/loaders/[source].py` that returns the expected schema, and register it in `config/data_sources.yaml`.
 
 ---
 
-**Last Updated**: [YYYY-MM-DD] | **Status**: [Active / Production] | **Maintainer**: [Name]
+**Last Updated**: 2026-11-23

@@ -363,7 +363,7 @@ api-gateway/
 3. Update root CLAUDE.md:
    - Replace detailed section with brief overview (2-3 sentences)
    - Add link to subfolder CLAUDE.md
-   - Add it to the Concepts list in Key Docs
+   - Add it to the Module docs list in Key Docs
 4. Update DOCS.md index if you have one
 
 ### Example: Before and After Split

@@ -1,6 +1,8 @@
 # Synchronizations - ML Workflow Example Project
 
-This document defines all cross-concept event flows.
+> **Optional, for event-driven projects.** Use this file when modules react to each other's events: an app where deleting a user deletes their posts, or a deployment service that stages a model when evaluation passes. A pipeline that runs its steps in order doesn't need it; the sketch under "The system" in the root `CLAUDE.md` covers that. To use it, copy this file to your project root, delete the example entries, and add your own with `/sync-flow`.
+
+This document defines all event flows between modules.
 
 **Rule**: If an action coordinates between two or more concepts (modules), it belongs here — not inside any individual concept's documentation or code. Concepts must remain independent; this file is the only place where inter-concept relationships are expressed.
 
@@ -46,9 +48,9 @@ This mirrors how a synchronization engine routes events between concepts. Concep
 
 ## Reference
 
-### What belongs here vs. inside a Concept
+### What belongs here vs. in a module CLAUDE.md
 
-| Belongs in Concept CLAUDE.md | Belongs here |
+| Belongs in the module's CLAUDE.md | Belongs here |
 |------------------------------|--------------|
 | Internal state transitions | Cross-concept event routing |
 | Validation of own inputs | Triggering downstream actions |
@@ -75,6 +77,6 @@ Use `[SYNC-NNN]` IDs for stable references in code reviews and cross-linking.
 
 **Last Updated**: 2026-03-11
 
-**Concepts**: [ml-workflow/CLAUDE.md](ml-workflow/CLAUDE.md) · [deployment/CLAUDE.md](deployment/CLAUDE.md)
+**Modules**: [ml-workflow/CLAUDE.md](ml-workflow/CLAUDE.md) · [deployment/CLAUDE.md](deployment/CLAUDE.md)
 
 **Related**: [Template CLAUDE.md](../templates/CLAUDE.md) · [Template ROADMAP.md](../templates/ROADMAP.md)

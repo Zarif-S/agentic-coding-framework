@@ -136,3 +136,20 @@ Append-only. If a decision changes, add a new ADR and mark the old one `Supersed
 **Consequences**: Every ADR costs one more line. Existing ADRs in copied projects don't have the field; that's fine, it applies from the next entry. Revisit if ADRs routinely list only the obvious pair.
 
 **In one line**: Each ADR now ends with the sentence you'd say out loud; we didn't force three options because padded options make the record less honest.
+
+### ADR-010: Concepts and synchronizations become optional; the default is a "The system" section
+
+**Date**: 2026-11-23 · **Status**: Accepted
+
+**Context**: Three projects used the framework. Two never wrote a concept spec or a SYNC entry. The third wrote 11 concept files (about 1,400 lines) and 7 SYNC entries for a straight pipeline, and never built the coordinator. The useful content in both was the invariants; the State and Actions tables restated function signatures and went stale. A ten-line pipeline sketch with hard rules in the root CLAUDE.md did the same job in another project. Concept design (Meng & Jackson) targets apps whose modules react to each other's events; most framework users build pipelines.
+
+**Options considered**:
+- **Keep concepts and syncs as the default setup step**: one consistent method / unused or over-built in all three projects, and syncs duplicate a pipeline's order
+- **Remove them entirely**: simplest / loses a sound method for event-driven projects and per-module rules that load only where needed
+- **Make them optional; default to "The system" in root CLAUDE.md**: the common case gets a short sketch and must-not-break rules; module docs and syncs stay for when they pay / two paths to explain
+
+**Decision**: Root `templates/CLAUDE.md` gets an optional "The system" section (flow sketch plus must-not-break rules). Concept specs become slim module `CLAUDE.md` files (purpose, must-not-break rules, gotchas, common tasks) written with `/module-doc`, which replaces `/concept-spec`. `SYNCHRONIZATIONS.md` leaves `templates/` and lives in `examples/` for event-driven projects; `/sync-flow` stays.
+
+**Consequences**: Less to write and maintain by default, and module rules cost nothing outside their folder. Projects copied earlier still have `SYNCHRONIZATIONS.md` and concept-style files; they keep working, and `/doc-health` flags long module docs. Users who relied on `/concept-spec` must use `/module-doc`. Revisit if event-driven projects become the common case.
+
+**In one line**: Most projects are pipelines, so the default is a short system sketch with the rules that must not break; module docs and synchronizations are there when a project grows into them.

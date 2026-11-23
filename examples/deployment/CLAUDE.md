@@ -1,111 +1,31 @@
-# Deployment - ML Workflow Example Project
+# Deployment - Example Project
 
-> **Isolation rule**: This file describes only what this concept owns. Any coordination with other concepts belongs in [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md), not here.
+<!--
+  Example module CLAUDE.md for an event-driven project. This module reacts to events
+  from ml-workflow without knowing about it; the reactions are in SYNCHRONIZATIONS.md.
+-->
 
----
+Moves trained models from staging to production, with promotion, rollback and retirement. It knows nothing about how a model was trained; how it reacts to `ml-workflow` is in [SYNCHRONIZATIONS.md](../SYNCHRONIZATIONS.md).
 
-## Concept Specification
+## Must not break
 
-**Purpose**: Manage the lifecycle of trained models from staging through production, including promotion, rollback, and retirement.
-
-### State
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `staged_model` | `Model \| None` | Model candidate awaiting promotion review |
-| `staged_experiment_id` | `str \| None` | Experiment ID of the staged model, for traceability |
-| `production_model` | `Model \| None` | Currently serving model |
-| `production_experiment_id` | `str \| None` | Experiment ID of the production model |
-| `deployment_id` | `str` | Unique ID for the current deployment slot |
-| `status` | `Literal['idle', 'staged', 'promoting', 'live', 'rolling_back']` | Current lifecycle state |
-| `rollout_config` | `RolloutConfig` | Traffic split, canary percentage, health thresholds |
-| `history` | `List[DeploymentRecord]` | Ordered log of past production models, for rollback |
-
-### Actions
-
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `stage` | `(model: Model, experiment_id: str) → deployment_id: str` | Accept a model candidate; set status to `staged` |
-| `promote` | `(deployment_id: str) → None` | Move staged model to production; push previous production to history |
-| `rollback` | `(deployment_id: str) → None` | Restore most recent entry from history to production |
-| `retire` | `(deployment_id: str) → None` | Remove production model; set status to `idle` |
-| `get_status` | `() → DeploymentStatus` | Return current status, deployment_id, and serving model metadata |
-
-### Invariants
-
-- At most one model holds `status = 'live'` at any time
-- `promote` can only be called when `status = 'staged'`; calling it in any other state is an error
-- `rollback` requires `len(history) > 0`; there must be a previous model to restore
-- `staged_experiment_id` and `production_experiment_id` are never cleared — they persist for audit purposes even after the model is replaced
-- `history` is append-only; records are never deleted
-
----
-
-## Architecture
-
-```
-        stage(model, experiment_id)
-                 ↓
-┌────────────────────────────────────────┐
-│  status: staged                        │
-│  staged_model = model                  │
-│  staged_experiment_id = experiment_id  │
-└────────────────────────────────────────┘
-                 ↓
-        promote(deployment_id)
-                 ↓
-┌────────────────────────────────────────┐
-│  status: live                          │
-│  production_model = staged_model       │
-│  previous model → history              │
-└────────────────────────────────────────┘
-         ↓                  ↓
-  retire(deployment_id)   rollback(deployment_id)
-         ↓                  ↓
-  status: idle         production_model = history[-1]
-```
-
----
-
-## Common Tasks
-
-### Deploying a new model
-
-1. A model is staged automatically when MLWorkflow evaluation passes — see [SYNC-001](../SYNCHRONIZATIONS.md#sync-001-auto-stage-on-evaluation-pass)
-2. Review staged model: `python deploy.py status`
-3. Promote manually: `python deploy.py promote --deployment-id <id>`
-
-### Rolling back
-
-```bash
-python deploy.py rollback --deployment-id <id>
-```
-
-Restores the most recent entry from `history`. If history is empty, the command fails with a clear error — do not attempt to re-stage from scratch without first investigating why history is missing.
-
-### Retiring a model (no replacement ready)
-
-```bash
-python deploy.py retire --deployment-id <id>
-```
-
-Sets status to `idle`. The serving endpoint will return a 503 until a new model is staged and promoted.
-
----
+- At most one model is live at any time.
+- `promote` runs only when status is `staged`; in any other state it raises.
+- `rollback` needs at least one entry in `history`.
+- The experiment IDs of staged and production models are kept for audit, even after the model is replaced.
+- `history` is append-only; records are never deleted.
 
 ## Gotchas
 
-- **`deployment_id` identifies the slot, not the model**: it's assigned once at `stage` and stays the same through promotion, rollback, and retirement. Don't regenerate it on `promote`; monitoring, alerts, and rollout configs hold references to it. (`deployment/manager.py:42`)
+- **`deployment_id` identifies the slot, not the model**: it's assigned once at `stage` and stays the same through promotion, rollback and retirement. Don't regenerate it on `promote`; monitoring, alerts and rollout configs hold references to it. (`deployment/manager.py:42`)
+- **One deployment slot**: multi-region or A/B deployments need one `Deployment` object per slot. If slots interact, the interaction is a new entry in SYNCHRONIZATIONS.md. (`deployment/manager.py:1`)
+
+## Common tasks
+
+- **Deploy a new model**: a model is staged automatically when evaluation passes ([SYNC-001](../SYNCHRONIZATIONS.md#sync-001-auto-stage-on-evaluation-pass)). Check it with `python deploy.py status`, then promote it with `python deploy.py promote --deployment-id <id>`.
+- **Roll back**: `python deploy.py rollback --deployment-id <id>` restores the latest entry in `history`. If history is empty the command fails; find out why before re-staging.
+- **Retire a model**: `python deploy.py retire --deployment-id <id>`. The endpoint returns 503 until a new model is staged and promoted.
 
 ---
 
-## Known Issues & Solutions
-
-**⚠️ KNOWN LIMITATION: Single deployment slot**
-- **Issue**: This concept manages one deployment slot. Multi-region or A/B deployments require multiple slots.
-- **Solution/Workaround**: Instantiate separate `Deployment` objects per slot; coordinate via SYNCHRONIZATIONS.md if slots interact.
-- **Location**: `deployment/manager.py:1`
-
----
-
-**Last Updated**: 2026-03-11 | **Status**: Example / Reference | **Maintainer**: Framework
+**Last Updated**: 2026-11-23

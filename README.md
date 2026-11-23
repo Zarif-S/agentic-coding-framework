@@ -51,12 +51,11 @@ your-project/
 ├── CHANGELOG.md                 # Feature and change history
 ├── DECISIONS.md                 # Why we chose X over Y (ADRs)
 ├── LESSONS_LEARNED.md           # What went wrong and what we do now
-├── SYNCHRONIZATIONS.md          # Cross-concept event flows
 ├── CONTRIBUTING.md              # Contributor guidelines
 │
 └── src/
     └── your-module/
-        └── CLAUDE.md            # Module-specific architecture & patterns
+        └── CLAUDE.md            # Optional: rules for this module only
 ```
 
 ### What Goes Where?
@@ -78,8 +77,8 @@ your-project/
 | **ROADMAP.md** | Quarters/Years | Strategic vision - the "destination" | "Q2 2024: Multi-tenancy support" |
 | **PROJECT_PLAN.md** | Weeks/Months | Tactical execution - the "route" | "Sprint 3: Implement OAuth middleware" |
 | **CLAUDE.md** (root) | Always current | Navigation hub + setup | Task routing, env setup, common commands |
-| **CLAUDE.md** (subfolder) | Always current | Architecture + patterns | Component design, integration guides |
-| **SYNCHRONIZATIONS.md** | Always current | Cross-concept event flows | "When user.delete fires → post.deleteAll follows" |
+| **CLAUDE.md** (subfolder, optional) | Always current | Rules for one module, loaded only in that folder | "Noise is added to training labels only" |
+| **SYNCHRONIZATIONS.md** (optional) | Always current | Event-driven projects: how modules react to each other | "When user.delete fires → post.deleteAll follows" |
 | **CHANGELOG.md** | Historical | *What* changed | "v2.1.0: Added rate limiting" |
 | **DECISIONS.md** | Historical, append-only | *Why* we chose X over Y | "ADR-004: Batch predictions before real-time serving" |
 | **LESSONS_LEARNED.md** | Historical, append-only | What experience taught us, and the rule it led to | "LL-002: Agent skipped legends → `save_figure()` helper" |
@@ -101,12 +100,11 @@ git clone https://github.com/Zarif-S/agentic-coding-framework.git
 # Copy the core templates to your project (everything in templates/, including .env.example)
 cp -r agentic-coding-framework/templates/. your-project/
 
-# Optional: start a concept from the example (or generate one with /concept-spec instead)
+# Optional: start a module CLAUDE.md from the example (or generate one with /module-doc)
 mkdir -p your-project/src/your-module
 cp agentic-coding-framework/examples/ml-workflow/CLAUDE.md your-project/src/your-module/
 ```
 
-If you copy the example, change its `../SYNCHRONIZATIONS.md` link to `../../SYNCHRONIZATIONS.md`: in the framework repo it points to `examples/SYNCHRONIZATIONS.md`, but in your project the file sits two levels up, at the root.
 
 ### 2. Customize for Your Project
 
@@ -127,11 +125,11 @@ This gives you nine `/commands` that automate the most common framework tasks, p
 
 | Command | What it does |
 |-------|-------------|
-| `/concept-spec` | Guided wizard to generate a new concept `CLAUDE.md` |
+| `/module-doc` | Writes a module `CLAUDE.md`: what the module does, rules that must not break, gotchas |
 | `/plan-feature` | Plans a feature, triages which docs need updating, and asks whether a decision needs recording |
 | `/decision` | Appends an ADR to `DECISIONS.md` (options considered, decision, consequences) |
 | `/check-done` | Checks the current diff against CLAUDE.md's Conventions and Definition of Done, including opening any changed figures |
-| `/sync-flow` | Adds a new SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
+| `/sync-flow` | Event-driven projects only: adds a SYNC-NNN entry to `SYNCHRONIZATIONS.md` |
 | `/changelog-gen` | Parses recent commits and drafts `CHANGELOG.md` entries |
 | `/doc-health` | Scans all docs for broken links, stale dates, missing sections, leftover placeholders |
 | `/polish` | Readability pass on a milestone's code (or, with `prose`, its docs and notebook text) by a fresh subagent, then checks nothing was lost |
@@ -144,8 +142,7 @@ Where each command fits in a project:
 flowchart TD
     subgraph setup["Setup (once)"]
         copy["Copy templates"] --> fill["Fill in CLAUDE.md and ROADMAP.md"]
-        fill --> spec["/concept-spec for each module"]
-        spec --> sync["/sync-flow for flows between modules"]
+        fill --> sketch["Sketch 'The system' in CLAUDE.md"]
     end
 
     subgraph milestone["Each milestone"]
@@ -157,12 +154,14 @@ flowchart TD
     end
 
     subgraph anytime["As needed"]
-        decision["/decision when a choice between alternatives is made"]
+        decision["/decision: the agent runs it when a choice is made"]
         changelog["/changelog-gen before a release"]
         health["/doc-health when docs feel out of sync"]
+        module["/module-doc when a module needs its own rules"]
+        syncflow["/sync-flow in event-driven projects"]
     end
 
-    sync --> plan
+    sketch --> plan
     walk -->|next milestone| plan
     build -.-> decision
 ```
@@ -188,45 +187,29 @@ When working with Claude Code or other AI assistants:
 
 ## Working with AI Agents
 
-The framework changes the *order of operations* for building with an agent, not just how things are documented. The key shift: **design your concepts before writing any code**. This gives the agent tight boundaries to work within and surfaces coordination decisions early — when they're cheap to change.
+The framework changes how you work with an agent, not just how things are documented. The key shift: **write down the rules that must not break before writing code, then work in small, checked steps.**
 
-### The four-step workflow
+### The workflow
 
-**1. Define your concepts first**
+**1. Sketch the system**
 
-Before touching code, ask the agent to draft the concepts your project needs:
+Before touching code, ask the agent to draft "The system" section of the root `CLAUDE.md`:
 
-> "I'm building a project that [brief description]. Using the concept spec format in `examples/ml-workflow/CLAUDE.md`, draft the concepts we need and their state/actions/invariants. Don't write any code yet."
+> "I'm building a project that [brief description]. Draft 'The system' section for CLAUDE.md: a short sketch of how data flows through it, and the rules a wrong change would break silently. Don't write any code yet."
 
-Review what it proposes. Maybe two concepts collapse into one, or a concept is too thin to justify its own module. This conversation is fast — getting it wrong in a spec is a 5-minute fix; getting it wrong in code is a refactor.
+Review it. Getting it wrong here is a five-minute fix; getting it wrong in code is a refactor.
 
-**2. Write the specs and SYNCHRONIZATIONS.md**
+**2. Work one milestone at a time**
 
-Once you've agreed on concepts, ask the agent to create the subfolder CLAUDE.md files and populate SYNCHRONIZATIONS.md:
+Plan, approve, build, then `/check-done` and `/polish`. One milestone per session keeps each task small enough to check.
 
-> "Create a CLAUDE.md for each concept using the format in `examples/ml-workflow/CLAUDE.md`. Then populate `SYNCHRONIZATIONS.md` with the cross-concept flows."
+**3. Add a module CLAUDE.md when a module needs its own rules**
 
-Review the sync entries. If a coordination feels wrong, fix the spec now. This is your coordination map before any implementation exists.
+When one module has rules the agent keeps breaking, or the root `CLAUDE.md` fills up with one module's detail, run `/module-doc`. Claude Code loads a folder's `CLAUDE.md` only when working in that folder, so those rules cost nothing elsewhere. A small project doesn't need any.
 
-**3. Implement one concept at a time**
+**4. Event-driven projects only: synchronizations**
 
-Scope each coding task strictly to one concept:
-
-> "Implement the `[Concept]` concept. Follow the spec in `[path]/CLAUDE.md` exactly. Do not import from any other concept. Write unit tests that verify the invariants."
-
-Repeat for each concept. Each task is self-contained — the agent has a tight spec and a clear rule about what it must not touch.
-
-**4. Implement the coordinator last**
-
-Once all concepts are implemented and tested in isolation:
-
-> "Read `SYNCHRONIZATIONS.md`. Create `coordinator.py` with one function per SYNC entry. This is the only file allowed to import from multiple concepts."
-
-The agent translates each SYNC entry directly into a function. If an entry is ambiguous, it surfaces now — not mid-implementation.
-
-### The discipline that makes it work
-
-Keep prompts scoped to one concept or one sync at a time. The instinct is to say "build the whole pipeline" — resist it. The framework only pays off if the agent operates within concept boundaries, and it will as long as your prompts respect them too.
+If modules react to each other's events ("when a model passes evaluation, stage it for deployment"), record each reaction in `SYNCHRONIZATIONS.md` with `/sync-flow`, so no module has to know about the others. This follows Meng & Jackson's concept design. A pipeline that runs its steps in order doesn't need it; the sketch from step 1 covers that. See [examples/SYNCHRONIZATIONS.md](examples/SYNCHRONIZATIONS.md).
 
 ### Keeping the agent careful
 
@@ -241,14 +224,14 @@ Agents tend to rush and miss small details: a plot without a legend, a parameter
 
 ### Recording decisions as you go
 
-When you and the agent choose between alternatives (a library, a data format, where something lives), run `/decision` right then, while the context is in the conversation. Writing ADRs after the fact is how they end up never written.
+When you and the agent choose between alternatives (a library, a data format, where something lives), the agent runs `/decision` right then, while the context is in the conversation; you don't need to ask. Writing ADRs after the fact is how they end up never written.
 
 ### What this buys you
 
-- **Smaller agent tasks**: Each prompt has a clear boundary. The agent isn't holding the whole system in context at once.
-- **Invariants as a safety net**: The agent knows from the spec what must hold after each action. You don't have to restate constraints in every prompt.
-- **Easier debugging**: If something breaks, the concept boundaries tell you exactly where to look.
-- **Safe iteration**: Changing a threshold or adding a downstream effect means updating one SYNC entry and the coordinator — neither concept doc changes.
+- **Smaller agent tasks**: Each milestone has a plan you approved and a check at the end.
+- **Rules as a safety net**: The rules that must not break are written where the agent loads them, and `/check-done` checks each diff against them. You don't have to restate them in every prompt.
+- **Context where it's needed**: Module rules load only when the agent works in that module.
+- **Reasoning that survives**: Decisions and lessons are recorded as they happen, not reconstructed later.
 
 ---
 
@@ -260,7 +243,7 @@ Once you're comfortable with the core framework, explore these optional patterns
 **When to use**: Projects with 10+ documented folders
 - Creates an ASCII navigation tree
 - Quick reference for complex codebases
-- See: [docs/ADVANCED_FEATURES.md#docs-index](docs/ADVANCED_FEATURES.md#docs-index)
+- See: [docs/ADVANCED_FEATURES.md#1-docsmd-index-pattern](docs/ADVANCED_FEATURES.md#1-docsmd-index-pattern)
 
 ### 2. PR Documentation Checklist
 **When to use**: Team collaboration starts
@@ -272,25 +255,25 @@ Once you're comfortable with the core framework, explore these optional patterns
 **When to use**: Fast iteration creates doc gaps
 - Track TODOs in `PROJECT_PLAN.md`
 - Prioritize doc updates alongside features
-- See: [docs/ADVANCED_FEATURES.md#doc-debt-tracking](docs/ADVANCED_FEATURES.md#doc-debt-tracking)
+- See: [docs/ADVANCED_FEATURES.md#3-documentation-debt-tracking](docs/ADVANCED_FEATURES.md#3-documentation-debt-tracking)
 
 ### 4. Conflict Detection Patterns
 **When to use**: Multiple people editing docs
 - Severity levels (🔴 Critical, 🟡 Moderate, 🟢 Minor)
 - Manual checklist for spotting contradictions
-- See: [docs/ADVANCED_FEATURES.md#conflict-detection](docs/ADVANCED_FEATURES.md#conflict-detection)
+- See: [docs/ADVANCED_FEATURES.md#4-conflict-detection-patterns](docs/ADVANCED_FEATURES.md#4-conflict-detection-patterns)
 
 ### 5. Multi-Folder Strategy Guide
 **When to use**: Project structure evolves
 - Heuristics for when to split CLAUDE.md into subfolders
 - Examples of folder size thresholds
-- See: [docs/ADVANCED_FEATURES.md#multi-folder-strategy](docs/ADVANCED_FEATURES.md#multi-folder-strategy)
+- See: [docs/ADVANCED_FEATURES.md#5-multi-folder-strategy-guide](docs/ADVANCED_FEATURES.md#5-multi-folder-strategy-guide)
 
 ### 6. Scheduled Retrospectives
 **When to use**: Continuous improvement culture
 - Every 2-3 months review template
 - Questions about doc effectiveness
-- See: [docs/ADVANCED_FEATURES.md#retrospectives](docs/ADVANCED_FEATURES.md#retrospectives)
+- See: [docs/ADVANCED_FEATURES.md#6-scheduled-retrospectives](docs/ADVANCED_FEATURES.md#6-scheduled-retrospectives)
 
 ### 7. Enforcing Conventions in Code
 **When to use**: The agent keeps missing the same detail despite a CLAUDE.md rule
@@ -306,15 +289,13 @@ Once you're comfortable with the core framework, explore these optional patterns
 
 ## Real-World Example
 
-See the `examples/` folder for a two-concept worked example showing the full framework in action:
+The `examples/` folder has two module docs and an optional synchronizations file:
 
 | File | What it demonstrates |
 |------|----------------------|
-| `examples/ml-workflow/CLAUDE.md` | Concept spec (state, actions, invariants) for a self-contained MLWorkflow concept |
-| `examples/deployment/CLAUDE.md` | Concept spec for a self-contained Deployment concept |
-| `examples/SYNCHRONIZATIONS.md` | How the two concepts coordinate — without either knowing about the other |
-
-The SYNCHRONIZATIONS.md is the key file to read: it shows what a real sync entry looks like and explains *why* the coordination lives here instead of in either concept's doc.
+| `examples/ml-workflow/CLAUDE.md` | A module `CLAUDE.md` for a training pipeline: what it does, rules that must not break, gotchas, common tasks |
+| `examples/deployment/CLAUDE.md` | A module `CLAUDE.md` for a deployment service that reacts to events from the pipeline |
+| `examples/SYNCHRONIZATIONS.md` | Optional, for event-driven projects: how the two modules coordinate without either knowing about the other |
 
 ---
 
@@ -429,7 +410,7 @@ This framework is designed to evolve. Potential enhancements being considered:
 
 **Shipped**: Nine Claude Code commands (plus `/teach`) are included in `.claude/commands/` and ready to copy into any project. See the table in [Quick Start step 3](#3-copy-the-claude-skills-optional).
 
-**Value**: Each command enforces framework conventions automatically: concepts stay isolated, decisions land in DECISIONS.md, sync entries stay in SYNCHRONIZATIONS.md, and work gets checked against the Definition of Done before it's called finished.
+**Value**: Each command enforces framework conventions automatically: decisions land in DECISIONS.md, module rules stay short, and work gets checked against the Definition of Done before it's called finished.
 
 ### 6. Framework Plugin/Extension
 

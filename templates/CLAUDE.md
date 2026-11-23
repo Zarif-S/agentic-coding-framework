@@ -11,16 +11,28 @@
 - [PROJECT_PLAN.md](PROJECT_PLAN.md): what we're doing now. Read before starting a feature.
 - [DECISIONS.md](DECISIONS.md): why we chose X over Y (ADRs).
 - [LESSONS_LEARNED.md](LESSONS_LEARNED.md): what went wrong and what we do differently now.
-- [SYNCHRONIZATIONS.md](SYNCHRONIZATIONS.md): cross-concept event flows.
 - [ROADMAP.md](ROADMAP.md): longer-term goals.
 - [CHANGELOG.md](CHANGELOG.md): what changed, per release.
 
-**Concepts**:
-- [Concept name]: `[path/to/concept/CLAUDE.md]`
+**Module docs** (loaded when working in that folder; add with `/module-doc`):
+- [Module name]: `[path/to/module/CLAUDE.md]`
 
 **Where things get written down**:
 - **Choosing between alternatives** → run `/decision` yourself as soon as the choice is made; don't wait for the user to ask, and don't write the ADR by hand. Don't record decisions anywhere else; other docs link to the ADR.
 - **Something went wrong that shouldn't happen again** → add to LESSONS_LEARNED.md. If it's about how you (the agent) should work, also add a rule to Conventions below.
+
+---
+
+## The system
+
+<!-- Optional; delete if the project is small. How the pieces fit, and the rules a wrong change would break silently. Rules for one module go in that module's CLAUDE.md. -->
+
+```
+[input] → [step] → [step] → [output]
+```
+
+**Must not break**:
+- [e.g. Scalers and encoders are fitted on training data only.]
 
 ---
 

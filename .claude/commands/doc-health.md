@@ -7,7 +7,7 @@ Scan all documentation files in the project for structural issues (broken links,
 1. **Discover all docs** — Find every Markdown file in the project:
    - Run a glob for `**/*.md` from the project root
    - Exclude: `node_modules/`, `.venv/`, `dist/`, `build/`, vendor directories
-   - Group by type: root docs (`CLAUDE.md`, `ROADMAP.md`, `PROJECT_PLAN.md`, `CHANGELOG.md`, `SYNCHRONIZATIONS.md`, `DECISIONS.md`, `LESSONS_LEARNED.md`), concept CLAUDE.md files (any `CLAUDE.md` in a subdirectory), and other docs
+   - Group by type: root docs (`CLAUDE.md`, `ROADMAP.md`, `PROJECT_PLAN.md`, `CHANGELOG.md`, `DECISIONS.md`, `LESSONS_LEARNED.md`, and `SYNCHRONIZATIONS.md` if present), module CLAUDE.md files (any `CLAUDE.md` in a subdirectory), and other docs
 
 2. **Run checks** — For each file, run all checks below. Collect every issue with its file path, line number (if applicable), severity, and a one-line description.
 
@@ -27,11 +27,6 @@ Scan all documentation files in the project for structural issues (broken links,
 - Resolve each path relative to the file's location
 - Flag any that point to a file that doesn't exist
 
-**[WARNING] Missing isolation rule**
-- Every concept CLAUDE.md (any CLAUDE.md not at the project root) must contain the isolation rule blockquote:
-  `> **Isolation rule**: This file describes only what this concept owns...`
-- Flag concept files where this line is absent
-
 ---
 
 ### Date checks (all docs)
@@ -49,7 +44,7 @@ Scan all documentation files in the project for structural issues (broken links,
 ### Required section checks
 
 **[CRITICAL] Root CLAUDE.md missing Key Docs section**
-- The root CLAUDE.md must contain a `## Key Docs` section listing the root docs and a `**Concepts**:` list
+- The root CLAUDE.md must contain a `## Key Docs` section listing the root docs
 - Flag if absent
 
 **[WARNING] Root CLAUDE.md missing Conventions or Definition of Done**
@@ -62,13 +57,8 @@ Scan all documentation files in the project for structural issues (broken links,
 - Flag numbering gaps or duplicates in either file
 - Flag any ADR marked `Superseded by ADR-NNN` where ADR-NNN doesn't exist
 
-**[WARNING] Concept CLAUDE.md missing Concept Specification**
-- Every concept CLAUDE.md must have a `## Concept Specification` section with `### State`, `### Actions`, and `### Invariants` subsections
-- Flag which subsections are missing
-
-**[WARNING] Concept CLAUDE.md missing Architecture section**
-- Every concept CLAUDE.md must have an `## Architecture` section containing an ASCII diagram (look for ` ``` ` block with box-drawing characters or arrows)
-- Flag if absent or if the section exists but contains only prose
+**[INFO] Long module CLAUDE.md**
+- Flag any module CLAUDE.md over 80 lines. Long ones usually restate what the code shows (function lists, signatures, field tables), which goes stale; suggest trimming to purpose, must-not-break rules, gotchas and common tasks
 
 **[INFO] CHANGELOG.md missing Unreleased section**
 - Flag if `CHANGELOG.md` exists but has no `## [Unreleased]` section
@@ -91,9 +81,9 @@ Scan all documentation files in the project for structural issues (broken links,
 
 ### Orphan checks
 
-**[WARNING] Concept CLAUDE.md not listed in root CLAUDE.md**
-- For every concept CLAUDE.md found, check whether its path appears in the `**Concepts**:` list in the root CLAUDE.md
-- Flag concept files that are missing from the list
+**[WARNING] Module CLAUDE.md not listed in root CLAUDE.md**
+- For every module CLAUDE.md found, check whether its path appears in the `**Module docs**` list in the root CLAUDE.md
+- Flag module docs that are missing from the list
 
 **[INFO] Doc file with no inbound links**
 - For every non-root Markdown file, check whether any other doc links to it
@@ -112,8 +102,7 @@ Scan all documentation files in the project for structural issues (broken links,
 
 ### Warnings (should fix)
 - [file] STALE DATE: Last Updated 2024-08-01 (>90 days ago)
-- [file] ORPHANED: not listed in root CLAUDE.md Concepts list
-- [file] MISSING: no isolation rule blockquote
+- [file] ORPHANED: not listed in root CLAUDE.md Module docs list
 
 ### Info (nice to fix)
 - [file] UNRELEASED section empty in CHANGELOG.md

@@ -2,9 +2,11 @@
 
 Add a new synchronization entry to `SYNCHRONIZATIONS.md` using the standard SYNC-NNN format from Meng & Jackson (2025).
 
+For event-driven projects, where modules react to each other's events. If the project is a pipeline that runs its steps in order, say so and suggest updating "The system" in the root `CLAUDE.md` instead.
+
 ## Steps
 
-1. **Find the SYNCHRONIZATIONS.md file** — Look for it at the project root or in the nearest parent directory. If it doesn't exist yet, tell the user and offer to create it from the template before continuing.
+1. **Find the SYNCHRONIZATIONS.md file** — Look for it at the project root or in the nearest parent directory. If it doesn't exist yet, tell the user and offer to create it from the framework's example (https://github.com/Zarif-S/agentic-coding-framework/blob/main/examples/SYNCHRONIZATIONS.md), with the example entries removed.
 
 2. **Read existing entries** — Scan the file to:
    - Determine the next SYNC-NNN number (e.g. if SYNC-003 is the last entry, the new one is SYNC-004)
@@ -19,15 +21,14 @@ Add a new synchronization entry to `SYNCHRONIZATIONS.md` using the standard SYNC
    If the user has already described the flow in natural language (e.g. "when a model passes evaluation, it should be staged for deployment"), extract what you can from that description and only ask for what's missing.
 
 4. **Validate before writing** — Flag any of the following and ask whether to proceed or revise:
-   - Either concept referenced doesn't appear to exist (no matching CLAUDE.md found)
-   - The trigger action isn't listed in the source concept's Actions table
-   - The effect action isn't listed in the target concept's Actions table
-   - The flow described is internal to a single concept (belongs in that concept's CLAUDE.md, not here)
+   - Either module referenced doesn't exist in the code
+   - The trigger or effect action doesn't exist as a function or method in that module's code
+   - The flow described is internal to a single module (belongs in that module's code or CLAUDE.md, not here)
    - A semantically identical or overlapping sync entry already exists
 
 5. **Append the entry** — Insert the new SYNC entry at the end of the `## Synchronizations` section, before the `## Reference` section. Use the exact format below. Do not modify any existing entries.
 
-6. **Update the footer** — If the `SYNCHRONIZATIONS.md` footer has a `**Concepts**:` line, add any newly referenced concepts that aren't already listed there.
+6. **Update the footer** — If the `SYNCHRONIZATIONS.md` footer has a `**Modules**:` line, add any newly referenced modules that aren't already listed there.
 
 7. **Confirm** — Tell the user:
    - The SYNC ID assigned (e.g. SYNC-004)

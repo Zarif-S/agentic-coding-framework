@@ -6,15 +6,15 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
 
 1. **Understand the feature** — If the user has described the feature in natural language, use that. Otherwise ask in a single message:
    - What does the feature do? (user-facing description)
-   - Which concept(s) does it touch or introduce?
+   - Which modules does it touch or add?
    - Is this new functionality, a change to existing behavior, or a fix?
    - Does it have any known dependencies or blockers?
    - Did planning it involve choosing between alternatives (approach, library, data format, where something lives)? If so, what were the options?
 
 2. **Read project state** — Before generating anything, read:
    - `PROJECT_PLAN.md` — understand current focus, active Now/Next/Later items, and active blockers
-   - `SYNCHRONIZATIONS.md` — check whether the feature introduces new cross-concept flows
-   - Root `CLAUDE.md`: check which concept CLAUDE.md files exist (from the `**Concepts**:` list)
+   - `SYNCHRONIZATIONS.md`, if it exists: check whether the feature adds a reaction between modules
+   - Root `CLAUDE.md`: "The system" section, and which module CLAUDE.md files exist (the `**Module docs**` list)
    - `ROADMAP.md`: identify which strategic initiative or milestone this feature belongs to
    - `DECISIONS.md`: check whether an existing ADR already covers a choice this feature depends on, or whether the feature contradicts one
 
@@ -30,12 +30,13 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    | Document | Decision | Reason |
    |----------|----------|--------|
    | `PROJECT_PLAN.md` | needs update | Add feature to Now/Next/Later |
-   | `SYNCHRONIZATIONS.md` | needs update / no change | New cross-concept flow? |
-   | `[concept]/CLAUDE.md` | needs update / no change | New state, actions, or invariants? |
+   | Root `CLAUDE.md` "The system" | needs update / no change | Does the flow or a must-not-break rule change? |
+   | `[module]/CLAUDE.md` | needs update / no change | New must-not-break rule or gotcha? |
+   | `SYNCHRONIZATIONS.md` (only if it exists) | needs update / no change | New reaction between modules? |
    | `ROADMAP.md` | needs update / no change | New initiative or milestone? |
    | `DECISIONS.md` | needs update / no change | Was a choice made between alternatives? Does it supersede an existing ADR? |
    | `CHANGELOG.md` | no change yet | Updated after implementation, not during planning |
-   | `[new concept]/CLAUDE.md` | new file required | Feature introduces a new concept? |
+   | `[new module]/CLAUDE.md` | new file required / not needed | New module with rules of its own? Most don't need one |
 
    Ask the user to confirm the triage before proceeding. If they want to adjust which docs get touched, revise and re-confirm.
 
@@ -54,15 +55,14 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
    Renumber existing items in the section if needed to maintain sequential numbering. Do not modify items in other sections.
 
 6. **Apply remaining doc updates** — For each document marked `needs update` in the triage (except PROJECT_PLAN.md, already done):
-   - If a concept CLAUDE.md needs new state/actions/invariants: add them in the correct tables. If the changes are substantial, suggest running `/concept-spec` instead to generate a fresh spec.
+   - If "The system" or a module CLAUDE.md needs a new rule or gotcha: add it. If a new module needs its own doc, suggest `/module-doc`.
    - If SYNCHRONIZATIONS.md needs a new entry: suggest running `/sync-flow` to add it properly, rather than writing it manually here.
    - If ROADMAP.md needs an initiative update: add the feature under the current quarter's Key Initiatives or flag it as a new initiative if it doesn't fit any existing one.
    - If DECISIONS.md needs an entry: write the ADR using the `/decision` format (next ADR number, options considered, decision, consequences), then link it from the PROJECT_PLAN.md entry's **Why** line. If the decision supersedes an existing ADR, update only that ADR's status line.
 
 7. **Confirm** — Output a short summary:
    - Files updated and what changed in each
-   - Any files that need follow-up (e.g. "Run `/sync-flow` to define the cross-concept event flow", "Run `/concept-spec` to create the new concept")
-   - If the feature introduces a new concept with no CLAUDE.md: "This feature needs a concept spec — run `/concept-spec` next."
+   - Any files that need follow-up (e.g. "Run `/module-doc` for the new module", "Run `/sync-flow` to add the new reaction")
 
 ---
 
@@ -72,7 +72,7 @@ Turn a feature description into a concrete documentation plan: a PROJECT_PLAN.md
 - Never touch CHANGELOG.md during planning — it's updated after implementation, not before
 - Never write decision rationale into PROJECT_PLAN.md or ROADMAP.md; it goes in an ADR, and those docs link to it
 - If the feature contradicts an Accepted ADR, flag this before writing anything and ask whether the ADR should be superseded
-- If the feature description implies cross-concept coordination (two or more concept names appear, or the flow crosses a module boundary), always mark SYNCHRONIZATIONS.md as `needs update` and direct the user to `/sync-flow`
+- If SYNCHRONIZATIONS.md exists and the feature adds a reaction between modules, mark it `needs update` and direct the user to `/sync-flow`. Don't create SYNCHRONIZATIONS.md for a project whose steps run in order
 - Do not invent tracking links — use "TBD" when none are provided
-- Keep the PROJECT_PLAN.md entry concise; this is a planning artifact, not a spec. The concept CLAUDE.md is the spec.
+- Keep the PROJECT_PLAN.md entry concise; this is a planning artifact, not a spec.
 - Strategic alignment in the entry ("Supports Q2 initiative: X") is optional but encouraged when the roadmap connection is clear

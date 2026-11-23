@@ -15,7 +15,7 @@ mkdir my-project && cd my-project
 git init
 
 # Copy the core templates (CLAUDE.md, ROADMAP.md, PROJECT_PLAN.md, CHANGELOG.md,
-# SYNCHRONIZATIONS.md, DECISIONS.md, LESSONS_LEARNED.md, .env.example)
+# DECISIONS.md, LESSONS_LEARNED.md, .env.example)
 cp -r ../agentic-coding-framework/templates/. .
 
 # Copy the Claude skills
@@ -42,7 +42,7 @@ Before writing any code, spend 15 minutes on these two files:
 
 **`ROADMAP.md`** — write one paragraph describing what you're building and why. Add your first goal. This takes 5 minutes and saves significant context-rebuilding later.
 
-Leave `PROJECT_PLAN.md`, `CHANGELOG.md`, `DECISIONS.md`, `LESSONS_LEARNED.md`, and `SYNCHRONIZATIONS.md` as-is for now. They fill in as you work.
+Leave `PROJECT_PLAN.md`, `CHANGELOG.md`, `DECISIONS.md` and `LESSONS_LEARNED.md` as-is for now. They fill in as you work.
 
 ### Conventions examples by project type
 
@@ -84,35 +84,23 @@ The template's Conventions are written for a data-science project. Pick the bloc
 
 ---
 
-## 3. Design your concepts (before writing code)
+## 3. Sketch the system (before writing code)
 
-This is the key step most people skip. Run:
+Ask Claude:
 
-```
-/concept-spec
-```
+> "I'm building [brief description]. Draft 'The system' section of CLAUDE.md: a short sketch of how data flows through the project, and the rules a wrong change would break silently. Don't write any code yet."
 
-Claude will ask you for the concept name, purpose, state, actions, and invariants. For each major module or responsibility in your project, create one concept spec. Aim for 2–4 concepts to start.
+Keep it to what the agent needs every session: the flow, plus rules such as "test labels are never changed". Getting it wrong here is a five-minute fix; getting it wrong in code is a refactor. For a small project, a few lines or nothing at all is fine.
 
-**Not sure how to split your project into concepts?** Ask Claude:
-
-> "I'm building [brief description]. What concepts should I define? Draft the state/actions/invariants for each — don't write any code yet."
-
-Review what it proposes. Adjust until the boundaries feel right. Getting this wrong in a spec is a 5-minute fix; getting it wrong in code is a refactor.
+**Later, as the project grows**: when one module has rules the agent keeps breaking, or the root CLAUDE.md fills up with one module's detail, run `/module-doc`. Claude Code loads a folder's CLAUDE.md only when working in that folder, so module rules cost nothing elsewhere.
 
 ---
 
-## 4. Define cross-concept coordination
+## 4. Event-driven projects only: synchronizations
 
-Once your concepts are specced, run:
+If modules react to each other's events (an app where deleting a user deletes their posts, or a deployment service that stages a model when evaluation passes), copy [examples/SYNCHRONIZATIONS.md](examples/SYNCHRONIZATIONS.md) to your project root, delete its example entries, and add one entry per reaction with `/sync-flow`.
 
-```
-/sync-flow
-```
-
-For every place where one concept's action should trigger another's, add a SYNC entry. This is your coordination map — written before any implementation exists.
-
-If nothing in your project coordinates across concepts yet, skip this step and come back when it's needed.
+A pipeline that runs its steps in order doesn't need this; the sketch from step 3 covers it. Skip this step unless your modules react to each other.
 
 ---
 
@@ -131,15 +119,11 @@ Describe the first thing you want to build. The skill will:
 
 ## 6. Implement
 
-For anything non-trivial, start in plan mode (Shift+Tab) or ask Claude to state its assumptions first. Then hand off with tight, concept-scoped prompts:
+For anything non-trivial, start in plan mode (Shift+Tab) or ask Claude to state its assumptions first. Work one milestone at a time: plan, approve, build, then `/check-done` and `/polish`. Keep each prompt to one milestone:
 
-> "Implement the `[Concept]` concept. Follow the spec in `[path]/CLAUDE.md` exactly. Do not import from any other concept. Write tests that verify the invariants."
+> "Implement M2 from PROJECT_PLAN.md. Follow 'The system' in CLAUDE.md and any module CLAUDE.md you touch. Write tests for the rules that must not break."
 
-Repeat for each concept independently. Once all concepts are implemented and tested:
-
-> "Read `SYNCHRONIZATIONS.md`. Create `coordinator.py` with one function per SYNC entry. This is the only file allowed to import from multiple concepts."
-
-Before calling each task done, run `/check-done`. When you and Claude choose between alternatives along the way, run `/decision` straight away.
+When you and Claude choose between alternatives along the way, Claude records it with `/decision`.
 
 ---
 
@@ -153,32 +137,27 @@ Before calling each task done, run `/check-done`. When you and Claude choose bet
 | Before a release or at end of sprint | `/changelog-gen` |
 | Before sharing or submitting the project | Clone it into a fresh folder, install from scratch, and run the tests and main command end to end. Timing bugs and missing files show up here, not in your working copy. |
 | Something feels out of sync across docs | `/doc-health` |
-| Adding a new module | `/concept-spec` |
+| A module needs rules of its own | `/module-doc` |
 | Planning the next feature | `/plan-feature` |
-| New cross-concept flow emerges | `/sync-flow` |
+| Event-driven project: modules start reacting to each other | `/sync-flow` |
 
 ---
 
 ## Example: Data Science / ML project
 
-Here's how the workflow maps to a typical DS/ML project:
+**The system** in the root CLAUDE.md:
 
-**Concepts to define first** (run `/concept-spec` for each):
-- `DataPipeline` — ingestion, validation, preprocessing
-- `Experiment` — training, evaluation, metric tracking
-- `Deployment` — staging, promotion, rollback
+```
+raw data → clean → split (by time) → features → train → evaluate
+```
 
-**Synchronizations to define** (run `/sync-flow` for each):
-- When `Experiment.evaluate` passes threshold → `Deployment.stage`
-- When `Deployment.promote` fires → `Experiment.archive`
+**Must not break**:
+- Split before fitting anything; scalers, encoders and imputers are fitted on training folds only.
+- The test period is used once, for the final model.
 
-**Implementation order**:
-1. `DataPipeline` — no dependencies, implement and test in isolation
-2. `Experiment` — depends on `DataPipeline` output, but not its internals
-3. `Deployment` — depends on `Experiment` output, but not its internals
-4. `coordinator.py` — the only file that wires them together, driven by SYNCHRONIZATIONS.md
+**Module docs, once the project grows**: for example `src/noise/CLAUDE.md` with "noise is added to training labels only; test labels are never changed". See [examples/ml-workflow/CLAUDE.md](examples/ml-workflow/CLAUDE.md).
 
-See `examples/` for a worked version of exactly this structure.
+**Synchronizations**: usually none, because the steps run in order. They become useful when, say, a deployment service reacts to evaluation results; see [examples/SYNCHRONIZATIONS.md](examples/SYNCHRONIZATIONS.md).
 
 ---
 
@@ -187,7 +166,7 @@ See `examples/` for a worked version of exactly this structure.
 After the first session you should have:
 - [ ] Root `CLAUDE.md` with your project name, stack, commands, and Conventions filled in, and no placeholders left
 - [ ] `ROADMAP.md` with at least one quarterly goal
-- [ ] At least one concept `CLAUDE.md` with state/actions/invariants
+- [ ] "The system" sketched in CLAUDE.md (or deleted, if the project is small)
 - [ ] `PROJECT_PLAN.md` with your first feature in the Now section
 
 That's enough context for Claude to rebuild a useful mental model of your project from scratch on any future session.

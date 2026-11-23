@@ -10,7 +10,7 @@ A documentation template that people copy into a new project so their coding age
 
 - `templates/`: the files users copy into their project root (`cp -r templates/. your-project/`). Everything here ships to every project.
 - `.claude/commands/`: slash commands. Users copy the whole folder, and they also work when you're in this repo.
-- `examples/`: worked concept `CLAUDE.md` files and an example `SYNCHRONIZATIONS.md`.
+- `examples/`: example module `CLAUDE.md` files and an optional `SYNCHRONIZATIONS.md` for event-driven projects.
 - `docs/ADVANCED_FEATURES.md`: optional patterns (sections 7–8: enforcing conventions in code, hooks).
 - `README.md`, `GETTING_STARTED.md`, `CONTRIBUTING.md`: framework docs for humans.
 - `DECISIONS.md`: this repo's own ADRs, about how the framework is designed. Not a template.
