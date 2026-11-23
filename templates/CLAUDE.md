@@ -19,7 +19,7 @@
 - [Concept name]: `[path/to/concept/CLAUDE.md]`
 
 **Where things get written down**:
-- **Choosing between alternatives** → append an ADR to DECISIONS.md (`/decision`). Don't record decisions anywhere else; other docs link to the ADR.
+- **Choosing between alternatives** → run `/decision` yourself as soon as the choice is made; don't wait for the user to ask, and don't write the ADR by hand. Don't record decisions anywhere else; other docs link to the ADR.
 - **Something went wrong that shouldn't happen again** → add to LESSONS_LEARNED.md. If it's about how you (the agent) should work, also add a rule to Conventions below.
 
 ---
@@ -73,7 +73,7 @@ Replace these examples with your project's rules. Write them as specific, checka
 - Every figure has a title and axis labels (with units). Any axes with more than one series has a legend.
 
 **Code style**
-- Plain functions in flat modules, not your own class hierarchies, wrappers or managers. Write a class only when a library requires one (e.g. a scikit-learn transformer) or a second implementation exists. Use libraries directly rather than wrapping them; adopting a new library or framework is a decision (ADR).
+- Plain functions in flat modules, not your own class hierarchies, wrappers or managers. Write a class only when a library requires one (e.g. a scikit-learn transformer) or a second implementation exists. Use libraries directly rather than wrapping them. Adding a dependency not listed under **Stack** is a decision (ADR).
 - Readable over clever: descriptive names, short functions, one statement per line (no `;` chains), a comment only where the *why* isn't obvious.
 - No defensive code for cases the call sites can't produce: no extra `None` checks, `try/except` or fallback defaults "just in case".
 - Type hints and a one-line docstring on public functions; the docstring states units and array shapes where relevant.

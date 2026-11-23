@@ -1,8 +1,8 @@
 # Polish
 
-Readability pass on a milestone's code by a fresh agent, then a verification pass by you (the agent that wrote it). The user reads only the polished code, so the polish must not change behaviour unless it says so.
+Readability pass on a milestone's code or prose by a fresh agent, then a verification pass by you (the agent that wrote it). The user reads only the polished version, so the polish must not change behaviour (code) or meaning (prose) unless it says so.
 
-Argument (optional): the files or commit range to polish. Default: uncommitted changes to `.py` files; if there are none, the files changed in `HEAD`.
+Argument (optional): the files or commit range to polish. Default: uncommitted changes to `.py` files; if there are none, the files changed in `HEAD`. Start the argument with `prose` to polish text instead (see Prose mode below).
 
 ## Steps
 
@@ -32,6 +32,32 @@ Argument (optional): the files or commit range to polish. Default: uncommitted c
 
 ---
 
+## Prose mode
+
+For Markdown files and the markdown cells of notebooks. Agent-written text tends to be long; this pass shortens it without losing what it says. Step 0 (commit first) applies as above.
+
+1. **Scope and baseline**
+   - List changed `.md` files and notebooks (markdown cells only). In append-only files (DECISIONS.md, LESSONS_LEARNED.md), only entries added in this milestone are in scope.
+   - Save to the scratchpad every number, named reference (file, function, section, ADR or LL ID) and claim in the in-scope text. This list is the baseline for step 3.
+   - Note word counts per file.
+
+2. **Polish (subagent, fresh context)** — spawn a `general-purpose` agent with this brief:
+
+   > Shorten and clarify the text in these files: [files]. Follow the Writing section of CLAUDE.md.
+   > Cut repetition, filler, hedges that carry no information, and sentences that restate a table or plot sitting next to them.
+   > Keep every number, reference and claim. If one is a duplicate, remove it and list it.
+   > Don't touch code cells, code blocks, headings other docs link to, or ADR/LL IDs. Don't edit other files. Do not commit.
+   > Finish with: (a) word count before and after, per file; (b) each number, reference or claim removed, and why; (c) any sentence whose meaning you changed.
+
+3. **Verify (you)**
+   - Check every item on the baseline list: still present, or listed by the subagent as a deliberate removal. Anything else that's missing is a finding.
+   - Read the full diff for changed meaning: a hedge removed from a claim that needed it, a qualifier dropped, two points merged into one.
+   - Run the link check from CLAUDE.md, if it has one; otherwise check that relative links and anchors in changed files still resolve.
+
+4. **Report** with the prose format below. Ask before committing; commit as `Tighten <files> for readability`.
+
+---
+
 ## Report Format
 
 ```
@@ -51,6 +77,21 @@ Tests: pass/fail · Lint: pass/fail · Script output: identical / differs ([why]
 
 ### Subagent's "not done" items
 - [item]: act / leave, [why]
+```
+
+For prose mode:
+
+```
+## Prose polish: [files]
+
+**Verdict**: keep / keep with fixes / revert — [one line why]
+Words: [before] → [after] · Baseline items kept: [N of M]
+
+### Removed on purpose
+- [item]: [why]
+
+### Meaning changes
+| Text | Before | Now | Fine? |
 ```
 
 ## Rules

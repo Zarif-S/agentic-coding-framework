@@ -41,7 +41,7 @@ Architectural decision records (ADRs): **why** we chose X over Y.
 <!--
   EXAMPLE: not a real decision. Delete once you've added your first ADR.
 
-### ADR-001: Store experiment parameters in YAML configs, not notebooks
+### ADR-000: Store experiment parameters in YAML configs, not notebooks
 
 **Date**: YYYY-MM-DD · **Status**: Accepted
 
