@@ -37,7 +37,7 @@ Argument (optional): the files or commit range to polish. Default: uncommitted c
 For Markdown files and the markdown cells of notebooks. Agent-written text tends to be long; this pass shortens it without losing what it says. Step 0 (commit first) applies as above.
 
 1. **Scope and baseline**
-   - List changed `.md` files and notebooks (markdown cells only). In append-only files (DECISIONS.md, LESSONS_LEARNED.md), only entries added in this milestone are in scope.
+   - List changed `.md` files and notebooks (markdown cells only). By default only the sections and cells the diff touched are in scope; a whole file is in scope only when the user names it in the argument. In append-only files (DECISIONS.md, LESSONS_LEARNED.md), only entries added in this milestone are in scope.
    - Save to the scratchpad every number, named reference (file, function, section, ADR or LL ID) and claim in the in-scope text. This list is the baseline for step 3.
    - Note word counts per file.
 
