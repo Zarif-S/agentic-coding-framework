@@ -42,12 +42,14 @@ cp .env.example .env   # then fill in values
 - For anything beyond a small fix, **state your plan and assumptions before editing**: which files you'll touch, where new parameters will live, what you'll verify. Wait for a go-ahead if anything is ambiguous.
 - Prefer asking over guessing when a convention below doesn't cover the case.
 - Keep changes scoped to the task. Mention unrelated problems you notice; don't fix them unasked.
+- One milestone (from PROJECT_PLAN.md) per session, one commit per milestone.
+- Per milestone: plan → user approves → build → readability pass (`/polish`, separate commit).
 
 ---
 
 ## Conventions
 
-Replace these examples with your project's rules. Write them as specific, checkable statements; vague rules ("write clean code") don't change behaviour. These examples are for a data-science project; for RAG/LLM and web projects see [Conventions examples by project type](https://github.com/Zarif-S/agentic-coding-framework/blob/main/GETTING_STARTED.md#conventions-examples-by-project-type).
+Replace these examples with your project's rules. Write them as specific, checkable statements; vague rules ("write clean code") don't change behaviour. Scope each rule to what it is about: "no caching" written against result caching also blocks loading static data once. These examples are for a data-science project; for RAG/LLM and web projects see [Conventions examples by project type](https://github.com/Zarif-S/agentic-coding-framework/blob/main/GETTING_STARTED.md#conventions-examples-by-project-type).
 
 **Parameters & config**
 - Tunable values (hyperparameters, thresholds, paths, seeds) live in `config/*.yaml`, loaded into dataclasses in `[src/mypkg]/config.py`.
@@ -59,8 +61,11 @@ Replace these examples with your project's rules. Write them as specific, checka
 - Create and save figures with `save_figure()` from `[src/mypkg]/plotting.py`. Don't call `plt.savefig()` / `plt.show()` directly.
 - Every figure has a title and axis labels (with units). Any axes with more than one series has a legend.
 
-**Code**
-- Type hints on public functions. Docstrings state units and array shapes where relevant.
+**Code style**
+- Plain functions in flat modules, not your own class hierarchies, wrappers or managers. Write a class only when a library requires one (e.g. a scikit-learn transformer) or a second implementation exists. Use libraries directly rather than wrapping them; adopting a new library or framework is a decision (ADR).
+- Readable over clever: descriptive names, short functions, one statement per line (no `;` chains), a comment only where the *why* isn't obvious.
+- No defensive code for cases the call sites can't produce: no extra `None` checks, `try/except` or fallback defaults "just in case".
+- Type hints and a one-line docstring on public functions; the docstring states units and array shapes where relevant.
 - New functions get a test in `tests/`.
 
 Where you can, enforce a convention in code rather than prose: a figure helper that refuses to save an unlabelled plot, a config model that fails on a missing parameter. See [Enforcing Conventions in Code](https://github.com/Zarif-S/agentic-coding-framework/blob/main/docs/ADVANCED_FEATURES.md#7-enforcing-conventions-in-code) for example snippets.
@@ -74,8 +79,9 @@ Before reporting a task as finished:
 1. Run the tests and linter; they pass.
 2. Re-read your diff against each rule in **Conventions**. List any rule you didn't meet and why.
 3. For every figure you created or changed: open the saved image and check it visually.
-4. If you chose between alternatives, an ADR exists in DECISIONS.md.
-5. Say explicitly what you did **not** verify.
+4. Every number or numerical claim you wrote in prose (notebook text, docs, an ADR) comes from data or output you ran, not from reasoning; every cross-reference points where it says.
+5. If you chose between alternatives, an ADR exists in DECISIONS.md.
+6. Say explicitly what you did **not** verify.
 
 Run `/check-done` to have this checked against the current diff.
 

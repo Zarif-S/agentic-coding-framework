@@ -1,6 +1,6 @@
 # Walkthrough
 
-Write the interview walkthrough for a milestone's code, so the user can understand and explain it without reading the code first. Run after `/polish` and its commit, on the final code.
+Write a plain-English walkthrough of a milestone's code, so the user can understand and explain it to others without reading the code first. Run after `/polish` and its commit, on the final code.
 
 Argument: the milestone (e.g. `M2`). Default: the most recent milestone marked done in PROJECT_PLAN.md.
 
@@ -12,7 +12,7 @@ Argument: the milestone (e.g. `M2`). Default: the most recent milestone marked d
 
 3. **Check it** against the code: every function named exists with that name, every claim about behaviour is true (run a one-liner if unsure), every ADR number is right.
 
-4. **Offer explain-it-back**: ask the user to explain the module in 3–5 sentences as they would to an interviewer. Then point out what was wrong, missing or vague, briefly. Don't lecture.
+4. **Offer explain-it-back**: ask the user to explain the module in 3–5 sentences as they would to a colleague or reviewer. Then point out what was wrong, missing or vague, briefly. Don't lecture.
 
 ---
 
@@ -28,14 +28,14 @@ Argument: the milestone (e.g. `M2`). Default: the most recent milestone marked d
 **Functions** (one line each: what it does, not how)
 - `name(args)`: ...
 
-**Design choices** (the "why X not Y" an interviewer will ask)
+**Design choices** (the "why X not Y" a reviewer will ask)
 - [choice]: [why, alternative rejected] (ADR-NNN)
 
 **Data quirks it handles**: [only if any]
 
 **What's tested and what isn't**: [one or two lines]
 
-**Likely interview questions**
+**Likely questions**
 - *Q*: ...
   *A*: [two or three sentences the user could say]
 ```
@@ -43,5 +43,5 @@ Argument: the milestone (e.g. `M2`). Default: the most recent milestone marked d
 ## Rules
 
 - Write for someone who hasn't read the code. If a sentence needs the code open to make sense, rewrite it.
-- 3–6 interview questions per milestone; favour the "why" and "what if" ones over "what does line N do".
+- 3–6 likely questions per milestone; favour the "why" and "what if" ones over "what does line N do".
 - Don't restate ADRs at length; one line and the ADR number.

@@ -12,9 +12,10 @@ Record a decision as an ADR in `DECISIONS.md`: what we chose, what we rejected, 
 
 3. **Gather information** — Extract as much as possible from the current conversation first. Decisions usually come up mid-task, and the context is already there. Only ask for what's missing, in a single message:
    - **Context**: what situation or constraint forced a choice?
-   - **Options considered**: at least two, each with its main pro and con
+   - **Options considered**: at least two, each with its main pro and con, so the trade-off is visible. For a dial (a threshold, a ratio, a window length), suggest weighing the two extremes and a middle option
    - **Decision**: which option, in one or two sentences
    - **Consequences**: what this makes easier or harder; what would make us revisit it
+   - **In one line**: the plain-language answer for someone who wasn't there, plus what would change the decision
 
 4. **Validate before writing** — Flag any of the following and ask whether to proceed or revise:
    - Only one option listed. If there was no real alternative, this probably isn't an ADR; suggest a Gotcha in CLAUDE.md or nothing at all
@@ -45,6 +46,8 @@ Record a decision as an ADR in `DECISIONS.md`: what we chose, what we rejected, 
 **Decision**: [What we chose.]
 
 **Consequences**: [What gets easier, what gets harder, when we'd revisit.]
+
+**In one line**: [Plain-language answer, plus what would change the decision.]
 ```
 
 ---

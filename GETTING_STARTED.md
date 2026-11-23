@@ -151,6 +151,7 @@ Before calling each task done, run `/check-done`. When you and Claude choose bet
 | Before calling a task done | `/check-done` |
 | Agent made the same mistake twice | Add to `LESSONS_LEARNED.md` and a rule to CLAUDE.md Conventions |
 | Before a release or at end of sprint | `/changelog-gen` |
+| Before sharing or submitting the project | Clone it into a fresh folder, install from scratch, and run the tests and main command end to end. Timing bugs and missing files show up here, not in your working copy. |
 | Something feels out of sync across docs | `/doc-health` |
 | Adding a new module | `/concept-spec` |
 | Planning the next feature | `/plan-feature` |

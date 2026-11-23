@@ -119,3 +119,20 @@ Append-only. If a decision changes, add a new ADR and mark the old one `Supersed
 **Decision**: Example blocks for RAG/LLM and web apps in `GETTING_STARTED.md` ("Conventions examples by project type"), linked by URL from `templates/CLAUDE.md`.
 
 **Consequences**: The template keeps one example set. Add further project types to GETTING_STARTED.md, not the template.
+
+### ADR-009: ADRs get an "In one line" field; the minimum stays at two options
+
+**Date**: 2026-11-23 · **Status**: Accepted
+
+**Context**: In two projects that used the framework, walkthroughs and explanations for reviewers had to be pieced together from ADR Context and Options after the fact. One project added an "In one line" field and a three-option minimum to its own `/decision`.
+
+**Options considered**:
+- **Keep the format as is**: no change for users / the plain-language answer is still reconstructed later
+- **Add "In one line", minimum two options**: the answer is written when the choice is made, at one line per ADR / doesn't push people past the obvious pair
+- **Add "In one line", minimum three options**: forces a wider search / when only two options are real, people invent a third, which makes the record less honest
+
+**Decision**: Add the "In one line" field to `templates/DECISIONS.md` and `/decision`. Keep the minimum at two options; the rules and `/decision` frame options as showing the trade-off, with extremes plus a middle option as a hint for dials.
+
+**Consequences**: Every ADR costs one more line. Existing ADRs in copied projects don't have the field; that's fine, it applies from the next entry. Revisit if ADRs routinely list only the obvious pair.
+
+**In one line**: Each ADR now ends with the sentence you'd say out loud; we didn't force three options because padded options make the record less honest.

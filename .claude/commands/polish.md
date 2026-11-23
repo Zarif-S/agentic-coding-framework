@@ -16,8 +16,8 @@ Argument (optional): the files or commit range to polish. Default: uncommitted c
 
 2. **Polish (subagent, fresh context)** — spawn a `general-purpose` agent with this brief, filling in the file list and protected names:
 
-   > Refactor these files for readability: [files]. The author must explain every line in an interview, so optimise for a reader seeing the code for the first time.
-   > Read the "Code style" rules in CLAUDE.md Conventions and the Hard rules first, and follow them: plain functions and dataclasses, no new classes or abstractions, descriptive names (`i`, `n_` are fine), short functions, comments only where the *why* isn't obvious.
+   > Refactor these files for readability: [files]. The author must be able to explain every line, so optimise for a reader seeing the code for the first time.
+   > Read the "Code style" rules in CLAUDE.md Conventions (and any Hard rules section) first, and follow them: plain functions and dataclasses, no new classes or abstractions, descriptive names (`i`, `n_` are fine), short functions, comments only where the *why* isn't obvious.
    > Do not rename these public names: [names]. Do not edit tests, docs or other files. Do not commit.
    > Keep behaviour identical. If a readability change also changes behaviour (stricter, looser, different error), make it only if it's clearly better, and list it.
    > Finish with: (a) each change and why, one line each; (b) every behaviour change, with an input that shows it; (c) things you considered but left alone.

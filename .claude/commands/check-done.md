@@ -21,11 +21,13 @@ Check the current changes against the project's Conventions and Definition of Do
 
 4. **Check figures visually** — For every image file created or changed in the diff (`.png`, `.jpg`, `.svg`), open it and check that the title, axis labels, units, and legend are present and readable. If the diff changes plotting code but no image was regenerated, flag that the figure wasn't checked.
 
-5. **Run the checks** — Run the test and lint commands listed in the root CLAUDE.md Setup & Commands section. Report pass/fail with the relevant output. If the commands are still placeholders, say so rather than guessing.
+5. **Check claims in prose** — For every number, numerical claim or cross-reference ("see section 8", "ADR-004") added to prose in the diff (markdown cells, docs, ADRs, comments), find the output, data or target it came from. Flag any you can't trace, and any reference that points to the wrong place.
 
-6. **Check decisions** — If the diff or the conversation shows a choice between alternatives (a new library, a changed data format, a different approach than the one in PROJECT_PLAN.md), check whether DECISIONS.md has a matching ADR. If not, suggest running `/decision`.
+6. **Run the checks** — Run the test and lint commands listed in the root CLAUDE.md Setup & Commands section. Report pass/fail with the relevant output. If the commands are still placeholders, say so rather than guessing.
 
-7. **Report** — Use the format below. Do not fix anything yet. Then ask: "Want me to fix the violations?"
+7. **Check decisions** — If the diff or the conversation shows a choice between alternatives (a new library, a changed data format, a different approach than the one in PROJECT_PLAN.md), check whether DECISIONS.md has a matching ADR. If not, suggest running `/decision`.
+
+8. **Report** — Use the format below. Do not fix anything yet. Then ask: "Want me to fix the violations?"
 
 ---
 
