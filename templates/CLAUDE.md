@@ -47,6 +47,17 @@ cp .env.example .env   # then fill in values
 
 ---
 
+## Writing
+
+Applies to docs, comments, notebook text and chat.
+
+- One idea per sentence. Split a sentence when it carries two points, not when it reaches a word count.
+- Active voice: say who or what does the action ("the validator rejects the answer").
+- One word per meaning. Once a term is chosen, use it everywhere; a new word reads as a new thing.
+- Numbered steps only for something the reader carries out in order. Explanations, findings and reviews are short paragraphs.
+
+---
+
 ## Conventions
 
 Replace these examples with your project's rules. Write them as specific, checkable statements; vague rules ("write clean code") don't change behaviour. Scope each rule to what it is about: "no caching" written against result caching also blocks loading static data once. These examples are for a data-science project; for RAG/LLM and web projects see [Conventions examples by project type](https://github.com/Zarif-S/agentic-coding-framework/blob/main/GETTING_STARTED.md#conventions-examples-by-project-type).
